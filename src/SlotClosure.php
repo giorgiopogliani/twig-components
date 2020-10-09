@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Digital\TwigComponents;
+namespace Performing\TwigComponents;
 
 use Closure;
 

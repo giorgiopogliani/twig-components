@@ -1,6 +1,6 @@
 <?php
 
-namespace Digital\TwigComponents;
+namespace Performing\TwigComponents;
 
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;

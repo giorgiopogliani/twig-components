@@ -1,6 +1,6 @@
 <?php
 
-namespace Digital\TwigComponents;
+namespace Performing\TwigComponents;
 
 use Twig\Node\Node;
 use Twig\Token;

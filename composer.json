@@ -1,17 +1,17 @@
 {
-    "name": "digital/twig-components",
+    "name": "performing/twig-components",
     "description": "Twig components extension",
     "keywords": [
         "digital",
         "twig-components"
     ],
-    "homepage": "https://github.com/digital/twig-components",
+    "homepage": "https://github.com/giorgiopogliani/twig-components",
     "license": "MIT",
     "authors": [
         {
             "name": "Giorgio Pogliani",
             "email": "giorgiopogliani94@gmail.com",
-            "homepage": "https://spatie.be",
+            "homepage": "https://performingdigital.com",
             "role": "Developer"
         }
     ],
@@ -26,12 +26,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Digital\\TwigComponents\\": "src"
+            "Performing\\TwigComponents\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Digital\\TwigComponents\\Tests\\": "tests"
+            "Performing\\TwigComponents\\Tests\\": "tests"
         }
     },
     "scripts": {

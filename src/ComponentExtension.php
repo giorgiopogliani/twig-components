@@ -3,7 +3,6 @@
 
 namespace Digital\TwigComponents;
 
-
 use Twig\Extension\AbstractExtension;
 
 class ComponentExtension extends AbstractExtension

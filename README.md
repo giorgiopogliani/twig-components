@@ -64,11 +64,6 @@ The output generated will be like this.
 composer test
 ```
 
-## Credits
-
-- [Giorgio Pogliani](https://github.com/giorgiopogliani)
-- [All Contributors](../../contributors)
-
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.

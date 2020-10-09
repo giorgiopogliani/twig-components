@@ -30,7 +30,7 @@ final class ComponentNode extends IncludeNode
 
         $compiler->raw(";\n")
             ->write(sprintf("if ($%s) {\n", $template))
-            ->write('$slot = new \Digital\TwigComponents\SlotClosure(function (){')
+            ->write('$slot = new \Performing\TwigComponents\SlotClosure(function (){')
             ->indent(3)
             ->subcompile($this->getNode('slot'))
             ->outdent(3)
@@ -75,7 +75,7 @@ final class ComponentNode extends IncludeNode
                 ->write("\n")
                 ->write("array_merge([\n")
                 ->write(" 'slot' => \$slot,\n")
-                ->write("'attributes' => new \Digital\TwigComponents\ComponentAttributes(")
+                ->write("'attributes' => new \Performing\TwigComponents\ComponentAttributes(")
                 ->subcompile($this->getNode('variables'), true)
                 ->raw(")")
                 ->raw("],")

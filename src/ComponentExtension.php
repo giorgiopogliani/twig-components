@@ -23,7 +23,7 @@ class ComponentExtension extends AbstractExtension
         $files = glob($this->path. DIRECTORY_SEPARATOR . "*.twig");
 
         return array_map(function ($file) {
-            return new ComponentTokenParser(basename($file), $this->relativePath);
+            return new ComponentTokenParser(basename($file, '.twig'), $this->relativePath);
         }, $files);
     }
 }

@@ -3,7 +3,6 @@
 
 namespace Performing\TwigComponents;
 
-
 use Twig\Extension\AbstractExtension;
 
 class ComponentExtension extends AbstractExtension

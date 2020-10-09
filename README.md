@@ -1,8 +1,8 @@
 # Twig components extension
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/digital/twig-components.svg?style=flat-square)](https://packagist.org/packages/digital/twig-components)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/digital/twig-components/run-tests?label=tests)](https://github.com/digital/twig-components/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/digital/twig-components.svg?style=flat-square)](https://packagist.org/packages/digital/twig-components)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/digital/twig-components)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/performing/twig-components/run-tests?label=tests)](https://github.com/digital/twig-components/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/digital/twig-components)
 
 This is a twig extension for automatically create components as tags. The name of the tag is based on files in a directory. This is highly inspired from blade components.  
 

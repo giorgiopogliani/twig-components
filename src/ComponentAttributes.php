@@ -3,7 +3,6 @@
 
 namespace Digital\TwigComponents;
 
-
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
@@ -64,7 +63,8 @@ class ComponentAttributes implements ArrayAccess, IteratorAggregate
         } else {
             $keys = is_array($keys) ? $keys : [$keys];
 
-            $values = array_filter($this->attributes,
+            $values = array_filter(
+                $this->attributes,
                 function ($key) use ($keys) {
                     return in_array($key, $keys);
                 },
@@ -86,7 +86,7 @@ class ComponentAttributes implements ArrayAccess, IteratorAggregate
         $attributes = $this->getAttributes();
 
         foreach ($attributeDefaults as $key => $value) {
-            if (!array_key_exists($key, $attributes)) {
+            if (! array_key_exists($key, $attributes)) {
                 $attributes[$key] = '';
             }
         }
@@ -107,13 +107,13 @@ class ComponentAttributes implements ArrayAccess, IteratorAggregate
      */
     protected function shouldEscapeAttributeValue($escape, $value)
     {
-        if (!$escape) {
+        if (! $escape) {
             return false;
         }
 
-        return !is_object($value) &&
-            !is_null($value) &&
-            !is_bool($value);
+        return ! is_object($value) &&
+            ! is_null($value) &&
+            ! is_bool($value);
     }
 
     /**
@@ -224,5 +224,4 @@ class ComponentAttributes implements ArrayAccess, IteratorAggregate
 
         return trim($string);
     }
-
 }

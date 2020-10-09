@@ -18,7 +18,7 @@ composer require performing/twig-components
 
 You can create the twig extension that will find all the files in the given directory and create the component tag.
 ```php
-$extension = new Performing\TwigComponents\ComponentExtension(
+$extension = new \Performing\TwigComponents\ComponentExtension(
     '/absoulute/path/to/components/directory',
     '/relative/twig/components/directory',
 );
@@ -27,7 +27,7 @@ $extension = new Performing\TwigComponents\ComponentExtension(
 For example, Craft CMS users can do the following:
 ```php
 Craft::$app->view->registerTwigExtension(
-    new Performing\TwigComponents\ComponentExtension(
+    new \Performing\TwigComponents\ComponentExtension(
         CRAFT_BASE_PATH . '/templates/components',
         '/components',
     )

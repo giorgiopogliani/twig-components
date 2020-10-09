@@ -1,0 +1,48 @@
+{
+    "name": "digital/twig-components",
+    "description": "Twig components extension",
+    "keywords": [
+        "digital",
+        "twig-components"
+    ],
+    "homepage": "https://github.com/digital/twig-components",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Giorgio Pogliani",
+            "email": "giorgiopogliani94@gmail.com",
+            "homepage": "https://spatie.be",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4",
+        "twig/twig": "~2.12.5 || ~2.13.1"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^2.16",
+        "phpunit/phpunit": "^9.3",
+        "vimeo/psalm": "^3.11"
+    },
+    "autoload": {
+        "psr-4": {
+            "Digital\\TwigComponents\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Digital\\TwigComponents\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "psalm": "vendor/bin/psalm",
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage",
+        "format": "vendor/bin/php-cs-fixer fix --allow-risky=yes"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}

@@ -3,7 +3,6 @@
 
 namespace Digital\TwigComponents;
 
-
 use Closure;
 
 class SlotClosure

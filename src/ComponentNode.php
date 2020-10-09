@@ -3,13 +3,10 @@
 namespace Digital\TwigComponents;
 
 use Twig\Compiler;
-use Twig\Node\BlockReferenceNode;
 use Twig\Node\Expression\AbstractExpression;
-use Twig\Node\Expression\BlockReferenceExpression;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
-
 
 final class ComponentNode extends IncludeNode
 {
@@ -70,7 +67,7 @@ final class ComponentNode extends IncludeNode
 
     protected function addTemplateArguments(Compiler $compiler)
     {
-        if (!$this->hasNode('variables')) {
+        if (! $this->hasNode('variables')) {
             $compiler->raw('$context');
         } else {
             $compiler

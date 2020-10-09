@@ -9,12 +9,12 @@ use Twig\TokenParser\IncludeTokenParser;
 final class ComponentTokenParser extends IncludeTokenParser
 {
     /**
-     * @var String $tag Component tag name.
+     * @var String Component tag name.
      */
     private string $tag;
 
     /**
-     * @var String $path Directory for the components files.
+     * @var String Directory for the components files.
      */
     private string $path;
 
@@ -59,7 +59,6 @@ final class ComponentTokenParser extends IncludeTokenParser
 
         return [$variables];
     }
-
 
     public function decideBlockEnd(Token $token): bool
     {

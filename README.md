@@ -12,14 +12,14 @@ highly inspired from blade components.
 You can install the package via composer:
 
 ```bash
-composer require digital/twig-components
+composer require performing/twig-components
 ```
 
 ## Usage
 
 You can create the twig extension that will find all the files in the given directory and create the component tag.
 ```php
-$extension = new Digital\TwigComponents\ComponentExtension(
+$extension = new Performing\TwigComponents\ComponentExtension(
     '/absoulute/path/to/components/directory',
     '/relative/twig/components/directory',
 );
@@ -28,7 +28,7 @@ $extension = new Digital\TwigComponents\ComponentExtension(
 For example, Craft CMS users can do the following:
 ```php
 Craft::$app->view->registerTwigExtension(
-    new Digital\TwigComponents\ComponentExtension(
+    new Performing\TwigComponents\ComponentExtension(
         CRAFT_BASE_PATH . '/templates/components',
         '/components',
     )

@@ -1,8 +1,8 @@
 # Twig components extension
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/digital/twig-components.svg?style=flat-square)](https://packagist.org/packages/digital/twig-components)
-[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/digital/twig-components/run-tests?label=tests)](https://github.com/digital/twig-components/actions?query=workflow%3Arun-tests+branch%3Amaster)
-[![Total Downloads](https://img.shields.io/packagist/dt/digital/twig-components.svg?style=flat-square)](https://packagist.org/packages/digital/twig-components)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/performing/twig-components)
+[![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/giorgiopogliani/twig-components/Tests)](https://github.com/giorgiopogliani/twig-components/actions?query=workflow%3Arun-tests+branch%3Amaster)
+[![Total Downloads](https://img.shields.io/packagist/dt/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/performing/twig-components)
 
 This is a twig extension for automatically create components as tags. The name of the tag is based on files in a directory. This is highly inspired from blade components.  
 
@@ -18,7 +18,7 @@ composer require performing/twig-components
 
 You can create the twig extension that will find all the files in the given directory and create the component tag.
 ```php
-$extension = new Performing\TwigComponents\ComponentExtension(
+$extension = new \Performing\TwigComponents\ComponentExtension(
     '/absoulute/path/to/components/directory',
     '/relative/twig/components/directory',
 );
@@ -27,7 +27,7 @@ $extension = new Performing\TwigComponents\ComponentExtension(
 For example, Craft CMS users can do the following:
 ```php
 Craft::$app->view->registerTwigExtension(
-    new Performing\TwigComponents\ComponentExtension(
+    new \Performing\TwigComponents\ComponentExtension(
         CRAFT_BASE_PATH . '/templates/components',
         '/components',
     )

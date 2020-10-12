@@ -30,7 +30,7 @@ final class ComponentNode extends IncludeNode
 
         $compiler->raw(";\n")
             ->write(sprintf("if ($%s) {\n", $template))
-            ->write('$slot = new \Performing\TwigComponents\SlotClosure(function (){')
+            ->write('$slot = new \Performing\TwigComponents\SlotClosure(function () use ($context, $macros) {')
             ->subcompile($this->getNode('slot'))
             ->write("});\n\n")
             ->write(sprintf('$%s->display(', $template))

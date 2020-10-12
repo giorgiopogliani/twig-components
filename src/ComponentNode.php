@@ -31,9 +31,7 @@ final class ComponentNode extends IncludeNode
         $compiler->raw(";\n")
             ->write(sprintf("if ($%s) {\n", $template))
             ->write('$slot = new \Performing\TwigComponents\SlotClosure(function (){')
-            ->indent(3)
             ->subcompile($this->getNode('slot'))
-            ->outdent(3)
             ->write("});\n\n")
             ->write(sprintf('$%s->display(', $template))
         ;
@@ -42,7 +40,6 @@ final class ComponentNode extends IncludeNode
 
         $compiler
             ->raw(");\n")
-            ->outdent()
             ->write("}\n")
         ;
     }
@@ -67,20 +64,27 @@ final class ComponentNode extends IncludeNode
 
     protected function addTemplateArguments(Compiler $compiler)
     {
-        if (! $this->hasNode('variables')) {
-            $compiler->raw('$context');
-        } else {
-            $compiler
-                ->indent(5)
-                ->write("\n")
-                ->write("array_merge([\n")
-                ->write(" 'slot' => \$slot,\n")
-                ->write("'attributes' => new \Performing\TwigComponents\ComponentAttributes(")
-                ->subcompile($this->getNode('variables'), true)
-                ->raw(")")
-                ->raw("],")
-                ->subcompile($this->getNode('variables'), true)
-                ->raw(")\n");
-        }
+        $compiler
+            ->indent(5)
+            ->write("\n")
+            ->write("array_merge([\n")
+            ->write(" 'slot' => \$slot,\n")
+            ->write("'attributes' => new \Performing\TwigComponents\ComponentAttributes(");
+
+            if ($this->hasNode('variables')) {
+                $compiler->subcompile($this->getNode('variables'), true);
+            } else {
+                $compiler->raw('[]');
+            }
+
+            $compiler->raw(")")->raw("],");
+
+            if ($this->hasNode('variables')) {
+                $compiler->subcompile($this->getNode('variables'), true);
+            } else {
+                $compiler->raw('[]');
+            }
+
+            $compiler->raw(")\n");
     }
 }

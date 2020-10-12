@@ -71,20 +71,20 @@ final class ComponentNode extends IncludeNode
             ->write(" 'slot' => \$slot,\n")
             ->write("'attributes' => new \Performing\TwigComponents\ComponentAttributes(");
 
-            if ($this->hasNode('variables')) {
-                $compiler->subcompile($this->getNode('variables'), true);
-            } else {
-                $compiler->raw('[]');
-            }
+        if ($this->hasNode('variables')) {
+            $compiler->subcompile($this->getNode('variables'), true);
+        } else {
+            $compiler->raw('[]');
+        }
 
-            $compiler->raw(")")->raw("],");
+        $compiler->raw(")")->raw("],");
 
-            if ($this->hasNode('variables')) {
-                $compiler->subcompile($this->getNode('variables'), true);
-            } else {
-                $compiler->raw('[]');
-            }
+        if ($this->hasNode('variables')) {
+            $compiler->subcompile($this->getNode('variables'), true);
+        } else {
+            $compiler->raw('[]');
+        }
 
-            $compiler->raw(")\n");
+        $compiler->raw(")\n");
     }
 }

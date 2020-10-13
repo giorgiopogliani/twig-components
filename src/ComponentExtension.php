@@ -8,12 +8,12 @@ use Twig\Extension\AbstractExtension;
 class ComponentExtension extends AbstractExtension
 {
     /**
-     * @var string $path
+     * @var string
      */
     private $path;
 
     /**
-     * @var string $relativePath
+     * @var string
      */
     private $relativePath;
 

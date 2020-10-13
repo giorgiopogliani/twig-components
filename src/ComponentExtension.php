@@ -7,9 +7,15 @@ use Twig\Extension\AbstractExtension;
 
 class ComponentExtension extends AbstractExtension
 {
-    private string $path;
+    /**
+     * @var string $path
+     */
+    private $path;
 
-    private string $relativePath;
+    /**
+     * @var string $relativePath
+     */
+    private $relativePath;
 
     public function __construct(string $path, string $relativePath)
     {

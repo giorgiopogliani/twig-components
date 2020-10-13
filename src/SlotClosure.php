@@ -7,7 +7,7 @@ use Closure;
 
 class SlotClosure
 {
-    private Closure $slot;
+    private $slot;
 
     public function __construct(Closure $slot)
     {

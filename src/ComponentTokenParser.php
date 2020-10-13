@@ -11,12 +11,12 @@ final class ComponentTokenParser extends IncludeTokenParser
     /**
      * @var String Component tag name.
      */
-    private string $tag;
+    private $tag;
 
     /**
      * @var String Directory for the components files.
      */
-    private string $path;
+    private $path;
 
     /**
      * ComponentTokenParser constructor.

@@ -19,6 +19,11 @@ class ComponentTest extends TestCase
 
         $html = $twig->render('index-button.twig');
 
-        $this->assertEquals("<button class=\"bg-blue-600 text-white\"> test </button>\n", $html);
+        $this->assertEquals(<<<HTML
+        <button class="bg-blue-600 text-white"> test </button>
+        <button class="bg-blue-600 text-white"> test </button>
+        <button class="bg-blue-600 text-white"> test </button>
+
+        HTML, $html);
     }
 }

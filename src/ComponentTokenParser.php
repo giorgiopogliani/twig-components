@@ -62,11 +62,22 @@ final class ComponentTokenParser extends IncludeTokenParser
 
     public function decideBlockEnd(Token $token): bool
     {
-        return $token->test('end' . $this->tag);
+        return $token->test('end' . $this->toCamelCase($this->tag));
+    }
+
+    public function toCamelCase(string $value): string
+    {
+        $value = str_replace(['-', '_'], ' ', $value);
+
+        $value = ucwords($value);
+
+        $value = str_replace(' ', '', $value);
+
+        return lcfirst($value);
     }
 
     public function getTag(): string
     {
-        return $this->tag;
+        return $this->toCamelCase($this->tag);
     }
 }

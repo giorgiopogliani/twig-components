@@ -20,7 +20,7 @@ class ComponentExtension extends AbstractExtension
     public function getTokenParsers()
     {
         return [
-            new ComponentTokenParser($this->relativePath)
+            new ComponentTokenParser($this->relativePath),
         ];
     }
 }

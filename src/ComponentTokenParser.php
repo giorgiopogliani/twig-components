@@ -74,7 +74,7 @@ final class ComponentTokenParser extends IncludeTokenParser
 
             while ($stream->nextIf(Token::OPERATOR_TYPE, '-')) {
                 $token = $stream->nextIf(Token::NAME_TYPE);
-                if (!is_null($token)) {
+                if (! is_null($token)) {
                     $name .= '-' . $token->getValue();
                 }
             }

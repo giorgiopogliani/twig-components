@@ -10,26 +10,17 @@ class ComponentExtension extends AbstractExtension
     /**
      * @var string
      */
-    private $path;
-
-    /**
-     * @var string
-     */
     private $relativePath;
 
-    public function __construct(string $path, string $relativePath)
+    public function __construct(string $relativePath)
     {
-        $this->path = rtrim($path, DIRECTORY_SEPARATOR);
-
         $this->relativePath = rtrim($relativePath, DIRECTORY_SEPARATOR);
     }
 
     public function getTokenParsers()
     {
-        $files = glob($this->path. DIRECTORY_SEPARATOR . "*.twig");
-
-        return array_map(function ($file) {
-            return new ComponentTokenParser(basename($file, '.twig'), $this->relativePath);
-        }, $files);
+        return [
+            new ComponentTokenParser($this->relativePath)
+        ];
     }
 }

@@ -2,17 +2,13 @@
 
 namespace Performing\TwigComponents;
 
+use Exception;
 use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\IncludeTokenParser;
 
 final class ComponentTokenParser extends IncludeTokenParser
 {
-    /**
-     * @var String Component tag name.
-     */
-    private $tag;
-
     /**
      * @var String Directory for the components files.
      */
@@ -23,61 +19,79 @@ final class ComponentTokenParser extends IncludeTokenParser
      * @param string $tag
      * @param string $path
      */
-    public function __construct(string $tag, string $path)
+    public function __construct(string $path)
     {
-        $this->tag = $tag;
         $this->path = $path;
     }
 
-    public function getComponentPath()
+    public function getComponentPath(string $name)
     {
-        return rtrim($this->path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $this->tag . '.twig';
+        return rtrim($this->path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . '.twig';
     }
 
     public function parse(Token $token): Node
     {
-        list($variables) = $this->parseArguments();
+        list($variables, $name) = $this->parseArguments();
 
         $slot = $this->parser->subparse([$this, 'decideBlockEnd'], true);
 
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
-        return new ComponentNode($this->getComponentPath(), $slot, $variables, $token->getLine());
+        return new ComponentNode($this->getComponentPath($name), $slot, $variables, $token->getLine());
     }
 
     protected function parseArguments()
     {
         $stream = $this->parser->getStream();
 
+        $name = null;
         $variables = null;
 
-        if ($stream->nextIf(/* Token::NAME_TYPE */ 5, 'with')) {
+        if ($stream->nextIf(Token::PUNCTUATION_TYPE, ':')) {
+            $name = $this->parseComponentName();
+        }
+
+        if ($stream->nextIf(/* Token::NAME_TYPE */5, 'with')) {
             $variables = $this->parser->getExpressionParser()->parseExpression();
         }
 
-        $stream->expect(/* Token::BLOCK_END_TYPE */ 3);
+        $stream->expect(/* Token::BLOCK_END_TYPE */3);
 
-        return [$variables];
+        return [$variables, $name];
+    }
+
+    public function parseComponentName(): string
+    {
+        $stream = $this->parser->getStream();
+
+        $path = [];
+        do {
+            if ($this->parser->getCurrentToken()->getType() != /** Token::NAME_TYPE */ 5) {
+                throw new Exception('First token must be a name type');
+            }
+
+            $name = $stream->next()->getValue();
+
+            while ($stream->nextIf(Token::OPERATOR_TYPE, '-')) {
+                $token = $stream->nextIf(Token::NAME_TYPE);
+                if (!is_null($token)) {
+                    $name .= '-' . $token->getValue();
+                }
+            }
+
+            $path[] = $name;
+        } while ($stream->nextIf(9 /** Token::PUNCTUATION_TYPE */, '.'));
+
+        return implode('/', $path);
     }
 
     public function decideBlockEnd(Token $token): bool
     {
-        return $token->test('end' . $this->toCamelCase($this->tag));
-    }
-
-    public function toCamelCase(string $value): string
-    {
-        $value = str_replace(['-', '_'], ' ', $value);
-
-        $value = ucwords($value);
-
-        $value = str_replace(' ', '', $value);
-
-        return lcfirst($value);
+        return $token->test('endx');
     }
 
     public function getTag(): string
     {
-        return $this->toCamelCase($this->tag);
+        return 'x';
     }
 }

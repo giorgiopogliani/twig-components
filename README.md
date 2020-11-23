@@ -14,26 +14,42 @@ You can install the package via composer:
 composer require performing/twig-components
 ```
 
+## Upgrade from 0.0.6 to 0.1.0
+
+### Syntax
+You would need to change the syntax into the following:
+```twig
+{% x:component-name with {any: 'param'} %}
+    <strong>Any Content</strong>
+{% endx %}
+```
+
+Now you can also reach for components files that are in subfolders with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
+```twig
+{% x:button.primary with {any: 'param'} %}
+    <strong>Any Content</strong>
+{% endx %}
+```
+### Installation
+
+Now you don't need to specify the absolute component directory but just your components folder relative to the twig templates directory.
+
 ## Usage
 
+### Installation
 You can create the twig extension that will find all the files in the given directory and create the component tag.
 ```php
-$extension = new \Performing\TwigComponents\ComponentExtension(
-    '/absoulute/path/to/components/directory',
-    '/relative/twig/components/directory',
-);
+$extension = new \Performing\TwigComponents\ComponentExtension('/relative/twig/components/directory');
 ```
 
 For example, Craft CMS users can do the following:
 ```php
 Craft::$app->view->registerTwigExtension(
-    new \Performing\TwigComponents\ComponentExtension(
-        CRAFT_BASE_PATH . '/templates/components',
-        '/components',
-    )
+    new \Performing\TwigComponents\ComponentExtension('/components')
 );
 ```
 
+### Components
 Next you can create a file in the components directory like this.
 ```twig
 {# /components/button.twig #}
@@ -45,9 +61,9 @@ Next you can create a file in the components directory like this.
 Use the new created tag.
 ```twig
 {# /index.twig #}
-{% button with {class:'bg-blue-600'} %}
+{% x:button with {class:'bg-blue-600'} %}
   <span class="text-lg">Click here!</span>
-{% endbutton %}
+{% endx %}
 ```
 
 The output generated will be like this.
@@ -59,7 +75,7 @@ The output generated will be like this.
 
 ## Testing
 
-``` bash
+```bash
 composer test
 ```
 

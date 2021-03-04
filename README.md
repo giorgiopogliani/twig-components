@@ -24,6 +24,20 @@ You would need to change the syntax into the following:
 {% endx %}
 ```
 
+#### Pro Tip (VSCode)
+Add this your user twig.json snippets 
+```
+"Component": {
+  "prefix": "x:",
+  "body": [
+    "{% x:$1 %}",
+    "$2",
+    "{% endx %}",
+  ],
+  "description": "Twig component"
+}
+```
+
 Now you can also reach for components files that are in subfolders with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
 ```twig
 {% x:button.primary with {any: 'param'} %}

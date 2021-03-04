@@ -24,6 +24,13 @@ You would need to change the syntax into the following:
 {% endx %}
 ```
 
+Now you can also reach for components files that are in subfolders with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
+```twig
+{% x:button.primary with {any: 'param'} %}
+    <strong>Any Content</strong>
+{% endx %}
+```
+
 #### Pro Tip (VSCode)
 Add this your user twig.json snippets 
 ```
@@ -38,12 +45,6 @@ Add this your user twig.json snippets
 }
 ```
 
-Now you can also reach for components files that are in subfolders with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
-```twig
-{% x:button.primary with {any: 'param'} %}
-    <strong>Any Content</strong>
-{% endx %}
-```
 ### Installation
 
 Now you don't need to specify the absolute component directory but just your components folder relative to the twig templates directory.

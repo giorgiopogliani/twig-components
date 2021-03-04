@@ -57,7 +57,7 @@ final class ComponentNode extends IncludeNode
         ;
     }
 
-    public function getTemplateName()
+    public function getTemplateName(): ?string
     {
         return $this->getAttribute('path');
     }

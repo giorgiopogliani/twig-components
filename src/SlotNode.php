@@ -2,14 +2,14 @@
 
 namespace Performing\TwigComponents;
 
-
 use Twig\Compiler;
 use Twig\Node\Node;
 use Twig\Node\NodeOutputInterface;
 
 final class SlotNode extends Node implements NodeOutputInterface
 {
-    public function __construct($name, $body, int $lineno = 0) {
+    public function __construct($name, $body, int $lineno = 0)
+    {
         parent::__construct(['body' => $body], ['name' => $name], $lineno, null);
     }
 

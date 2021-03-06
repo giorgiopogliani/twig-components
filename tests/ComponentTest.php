@@ -51,4 +51,19 @@ class ComponentTest extends TestCase
         <button class="text-white bg-blue-800 rounded"> test </button>
         HTML, $html);
     }
+
+    /** @test */
+    public function render_component_with_slots()
+    {
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
+        $twig = new \Twig\Environment($loader);
+
+        $twig->addExtension(new ComponentExtension('/components'));
+
+        $html = $twig->render('test_with_slots.twig');
+
+        $this->assertEquals(<<<HTML
+        <div><span>test</span><div>test</div></div>
+        HTML, $html);
+    }
 }

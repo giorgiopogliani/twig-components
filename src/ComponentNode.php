@@ -30,9 +30,14 @@ final class ComponentNode extends IncludeNode
 
         $compiler->raw(";\n")
             ->write(sprintf("if ($%s) {\n", $template))
-            ->write('$slot = new \Performing\TwigComponents\SlotClosure(function () use ($context, $macros) {')
+            ->indent(1)
+            ->indent(1)
+            ->write('$context["slots"] = [];')
+            ->write("ob_start();")
             ->subcompile($this->getNode('slot'))
-            ->write("});\n\n")
+            ->indent(-1)
+            ->write('$slot = ob_get_clean();')
+            ->indent(-1)
             ->write(sprintf('$%s->display(', $template))
         ;
 
@@ -65,11 +70,12 @@ final class ComponentNode extends IncludeNode
     protected function addTemplateArguments(Compiler $compiler)
     {
         $compiler
-            ->indent(5)
-            ->write("\n")
-            ->write("array_merge([\n")
-            ->write(" 'slot' => \$slot,\n")
-            ->write("'attributes' => new \Performing\TwigComponents\ComponentAttributes(");
+        ->indent(1)
+        ->write("\n")
+        ->write("array_merge(\n")
+        ->write('$context["slots"],[' . PHP_EOL)
+        ->write("'slot' => \$slot,\n")
+        ->write("'attributes' => new \Performing\TwigComponents\ComponentAttributes(");
 
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);
@@ -77,7 +83,9 @@ final class ComponentNode extends IncludeNode
             $compiler->raw('[]');
         }
 
-        $compiler->raw(")")->raw("],");
+        $compiler->write(")\n")
+                ->indent(-1)
+                ->write("],");
 
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);
@@ -85,6 +93,6 @@ final class ComponentNode extends IncludeNode
             $compiler->raw('[]');
         }
 
-        $compiler->raw(")\n");
+        $compiler->write(")\n");
     }
 }

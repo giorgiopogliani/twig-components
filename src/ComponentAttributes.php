@@ -51,6 +51,17 @@ class ComponentAttributes implements ArrayAccess, IteratorAggregate
     }
 
     /**
+     * Get a given attribute from the attribute array.
+     *
+     * @param string $key
+     * @return bool
+     */
+    public function has($key)
+    {
+        return array_key_exists($key, $this->attributes);
+    }
+
+    /**
      * Only include the given attribute from the attribute array.
      *
      * @param mixed|array $keys

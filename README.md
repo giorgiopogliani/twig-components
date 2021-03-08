@@ -14,24 +14,46 @@ You can install the package via composer:
 composer require performing/twig-components
 ```
 
-## Upgrade from 0.0.6 to 0.1.0
+You can create the twig extension that will find all the files in the given directory.
+```php
+$extension = new \Performing\TwigComponents\ComponentExtension('/relative/twig/components/directory');
+```
 
-### Syntax
-You would need to change the syntax into the following:
+For example, Craft CMS users can do the following:
+```php
+Craft::$app->view->registerTwigExtension(
+    new \Performing\TwigComponents\ComponentExtension('/components')
+);
+```
+
+## Syntax
 ```twig
 {% x:component-name with {any: 'param'} %}
     <strong>Any Content</strong>
 {% endx %}
 ```
 
-Now you can also reach for components files that are in subfolders with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
+You can also reach for components files that are in subfolders with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
 ```twig
 {% x:button.primary with {any: 'param'} %}
     <strong>Any Content</strong>
 {% endx %}
 ```
 
-#### Pro Tip (VSCode)
+### Slots (0.2.0)
+```twig
+{% x:card %}
+   {% slot:title %} Some Title {% endslot %}
+    
+    Some content {# normal slot variable #}
+   
+   {% slot:buttons %}  
+       {% x:button.primary %} Submit {% endx %}
+   {% endslot %}
+{% endx %}
+```
+
+### Pro Tip (VSCode)
 Add this your user twig.json snippets 
 ```
 "Component": {
@@ -45,27 +67,8 @@ Add this your user twig.json snippets
 }
 ```
 
-### Installation
-
-Now you don't need to specify the absolute component directory but just your components folder relative to the twig templates directory.
-
-## Usage
-
-### Installation
-You can create the twig extension that will find all the files in the given directory and create the component tag.
-```php
-$extension = new \Performing\TwigComponents\ComponentExtension('/relative/twig/components/directory');
-```
-
-For example, Craft CMS users can do the following:
-```php
-Craft::$app->view->registerTwigExtension(
-    new \Performing\TwigComponents\ComponentExtension('/components')
-);
-```
-
 ### Components
-Next you can create a file in the components directory like this.
+You can create a file in the components directory like this.
 ```twig
 {# /components/button.twig #}
 <button {{ attributes.merge({ class:'text-white rounded-md px-4 py-2' })|raw }}>

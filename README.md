@@ -17,13 +17,7 @@ composer require performing/twig-components
 You can create the twig extension that will find all the files in the given directory.
 ```php
 $extension = new \Performing\TwigComponents\ComponentExtension('/relative/twig/components/directory');
-```
-
-For example, Craft CMS users can do the following:
-```php
-Craft::$app->view->registerTwigExtension(
-    new \Performing\TwigComponents\ComponentExtension('/components')
-);
+$twig->addExtension($extension);
 ```
 
 ## Syntax
@@ -100,6 +94,7 @@ $twig->setLexer(new Performing\TwigComponents\ComponentLexer($twig));
 
 **Keep in mind** that you should set the lexer after you register all your twig extensions.
 
+### Craft CMS
 For example in Craft CMS you should do somethind like this: 
 ```php
 if (Craft::$app->request->getIsSiteRequest()) {

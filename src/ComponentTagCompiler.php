@@ -187,7 +187,7 @@ class ComponentTagCompiler
             )?
         /x';
 
-        if (!preg_match_all($pattern, $attributeString, $matches, PREG_SET_ORDER)) {
+        if (! preg_match_all($pattern, $attributeString, $matches, PREG_SET_ORDER)) {
             return '{}';
         }
 

@@ -102,16 +102,16 @@ $twig->setLexer(new Performing\TwigComponents\ComponentLexer($twig));
 
 For example in Craft CMS you should do somethind like this: 
 ```php
-Event::on(
-    Plugins::class,
-    Plugins::EVENT_AFTER_LOAD_PLUGINS,
-    function (Event $event) {
-        $twig = Craft::$app->getView()->getTwig();
-        $twig->setLexer(new ComponentLexer($twig));
-    }
-);
-```
+if (Craft::$app->request->getIsSiteRequest()) {
+    Craft::$app->view->registerTwigExtension(
+        new \Performing\TwigComponents\ComponentExtension('/components')
+    );
 
+    // Enable x-tags syntax
+    $twig = Craft::$app->getView()->getTwig();
+    $twig->setLexer(new \Performing\TwigComponents\ComponentLexer($twig));
+}
+```
 
 ### Components
 You can create a file in the components directory like this.

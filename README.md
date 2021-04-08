@@ -110,6 +110,22 @@ if (Craft::$app->request->getIsSiteRequest()) {
     // Enable x-tags syntax
     $twig = Craft::$app->getView()->getTwig();
     $twig->setLexer(new \Performing\TwigComponents\ComponentLexer($twig));
+```
+If you get 'Unable to register extension "..." as extensions have already been initialized' try like this.
+```php
+if (Craft::$app->request->getIsSiteRequest()) {
+    Craft::$app->view->registerTwigExtension(
+        new \Performing\TwigComponents\ComponentExtension('/components')
+    );
+        
+    Event::on(
+        Plugins::class,
+        Plugins::EVENT_AFTER_LOAD_PLUGINS,
+        function (Event $event) {
+            $twig = Craft::$app->getView()->getTwig();
+            $twig->setLexer(new \Performing\TwigComponents\ComponentLexer($twig));
+        }
+    );
 }
 ```
 

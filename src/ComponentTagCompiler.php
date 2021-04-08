@@ -208,8 +208,10 @@ class ComponentTagCompiler
                 $value = $this->stripQuotes($value);
             }
 
-            if (str_starts_with($this->stripQuotes($value), '{{') && str_ends_with($this->stripQuotes($value), '}}')) {
-                $value = substr($this->stripQuotes($value), 2, -2);
+            $valueWithoutQuotes = $this->stripQuotes($value);
+
+            if ((strpos($valueWithoutQuotes, '{{') === 0) && (strpos($valueWithoutQuotes, '}}') === strlen($valueWithoutQuotes) - 2)) {
+                $value = substr($valueWithoutQuotes, 2, -2);
             } else {
                 $value = $value;
             }
@@ -234,7 +236,7 @@ class ComponentTagCompiler
      */
     public function stripQuotes(string $value)
     {
-        return str_starts_with($value, '"') || str_starts_with($value, '\'')
+        return strpos($value, '"') === 0 || strpos($value, '\'') === 0
             ? substr($value, 1, -1)
             : $value;
     }

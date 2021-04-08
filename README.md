@@ -67,6 +67,52 @@ Add this your user twig.json snippets
 }
 ```
 
+### X Tags (0.3.0)
+Now, you can enable `<x-tags />` for your twig components, here an example: 
+```html
+<x-button>
+    <x-slot name="icon">
+        <!-- my icon -->
+    </x-slot>
+    Submit
+</x-button>
+```
+
+You can pass attributes like this:
+```html
+<x-button 
+    :any="'evaluate' ~ 'twig'"
+    other="{{'this' ~ 'works' ~ 'too'}}" 
+    another="or this"
+    not-this="{{'this' ~ 'does'}}{{ 'not work' }}"
+>
+    <x-slot name="icon">
+        <!-- my icon -->
+    </x-slot>
+    Submit
+</x-button>
+```
+
+To enable this feature you need to set the lexer on your twig enviroment. 
+```php
+$twig->setLexer(new Performing\TwigComponents\ComponentLexer($twig));
+```
+
+**Keep in mind** that you should set the lexer after you register all your twig extensions.
+
+For example in Craft CMS you should do somethind like this: 
+```php
+Event::on(
+    Plugins::class,
+    Plugins::EVENT_AFTER_LOAD_PLUGINS,
+    function (Event $event) {
+        $twig = Craft::$app->getView()->getTwig();
+        $twig->setLexer(new ComponentLexer($twig));
+    }
+);
+```
+
+
 ### Components
 You can create a file in the components directory like this.
 ```twig

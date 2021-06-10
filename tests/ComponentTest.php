@@ -2,21 +2,28 @@
 
 namespace Performing\TwigComponents\Tests;
 
-use Performing\TwigComponents\ComponentExtension;
-use Performing\TwigComponents\ComponentLexer;
+use Performing\TwigComponents\Setup;
 use PHPUnit\Framework\TestCase;
 
 class ComponentTest extends TestCase
 {
+    protected function setupTwig(): \Twig\Environment
+    {
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
+
+        $twig = new \Twig\Environment($loader, [
+            'cache' => false,
+        ]);
+
+        Setup::init($twig, '/components');
+
+        return $twig;
+    }
+
     /** @test */
     public function render_simple_component()
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-        $twig = new \Twig\Environment($loader);
-
-        $twig->addExtension(new ComponentExtension('/components'));
-
-        $twig->setLexer(new ComponentLexer($twig));
+        $twig = $this->setupTwig();
 
         $html = $twig->render('test_simple_component.twig');
 
@@ -28,12 +35,7 @@ class ComponentTest extends TestCase
     /** @test */
     public function render_simple_component_with_dash()
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-        $twig = new \Twig\Environment($loader);
-
-        $twig->addExtension(new ComponentExtension('/components'));
-
-        $twig->setLexer(new ComponentLexer($twig));
+        $twig = $this->setupTwig();
 
         $html = $twig->render('test_simple_component_with_dash.twig');
 
@@ -45,12 +47,7 @@ class ComponentTest extends TestCase
     /** @test */
     public function render_simple_component_in_folder()
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-        $twig = new \Twig\Environment($loader);
-
-        $twig->addExtension(new ComponentExtension('/components'));
-
-        $twig->setLexer(new ComponentLexer($twig));
+        $twig = $this->setupTwig();
 
         $html = $twig->render('test_simple_component_in_folder.twig');
 
@@ -62,12 +59,7 @@ class ComponentTest extends TestCase
     /** @test */
     public function render_component_with_slots()
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-        $twig = new \Twig\Environment($loader);
-
-        $twig->addExtension(new ComponentExtension('/components'));
-
-        $twig->setLexer(new ComponentLexer($twig));
+        $twig = $this->setupTwig();
 
         $html = $twig->render('test_with_slots.twig');
 
@@ -79,12 +71,7 @@ class ComponentTest extends TestCase
     /** @test */
     public function render_xtags_with_slots()
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-        $twig = new \Twig\Environment($loader);
-
-        $twig->addExtension(new ComponentExtension('/components'));
-
-        $twig->setLexer(new ComponentLexer($twig));
+        $twig = $this->setupTwig();
 
         $html = $twig->render('test_xtags_with_slots.twig');
 
@@ -96,12 +83,7 @@ class ComponentTest extends TestCase
     /** @test */
     public function render_component_with_xtags()
     {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-        $twig = new \Twig\Environment($loader);
-
-        $twig->addExtension(new ComponentExtension('/components'));
-
-        $twig->setLexer(new ComponentLexer($twig));
+        $twig = $this->setupTwig();
 
         $html = $twig->render('test_xtags_component.twig');
 

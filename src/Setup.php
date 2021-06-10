@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Performing\TwigComponents;
 
 use Twig\Environment;

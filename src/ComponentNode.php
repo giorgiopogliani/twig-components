@@ -28,16 +28,12 @@ final class ComponentNode extends IncludeNode
 
         $this->addGetTemplate($compiler);
 
-        $compiler->raw(";\n")
+        $compiler
             ->write(sprintf("if ($%s) {\n", $template))
-            ->indent(1)
-            ->indent(1)
-            ->write('$context["slots"] = [];')
-            ->write("ob_start();")
+            ->write('$slots = [];' . PHP_EOL)
+            ->write("ob_start();"  . PHP_EOL)
             ->subcompile($this->getNode('slot'))
-            ->indent(-1)
-            ->write('$slot = ob_get_clean();')
-            ->indent(-1)
+            ->write('$slot = ob_get_clean();' . PHP_EOL)
             ->write(sprintf('$%s->display(', $template))
         ;
 
@@ -52,13 +48,18 @@ final class ComponentNode extends IncludeNode
     protected function addGetTemplate(Compiler $compiler)
     {
         $compiler
-            ->write('$this->loadTemplate(')
+            ->raw('$this->loadTemplate(' . PHP_EOL)
+            ->indent(1)
+            ->write('')
             ->repr($this->getTemplateName())
-            ->raw(', ')
+            ->raw(', ' . PHP_EOL)
+            ->write('')
             ->repr($this->getTemplateName())
-            ->raw(', ')
+            ->raw(', ' . PHP_EOL)
+            ->write('')
             ->repr($this->getTemplateLine())
-            ->raw(')')
+            ->indent(-1)
+            ->raw(PHP_EOL . ');' . PHP_EOL . PHP_EOL)
         ;
     }
 
@@ -73,9 +74,9 @@ final class ComponentNode extends IncludeNode
         ->indent(1)
         ->write("\n")
         ->write("array_merge(\n")
-        ->write('$context["slots"],[' . PHP_EOL)
-        ->write("'slot' => \$slot,\n")
-        ->write("'attributes' => new \Performing\TwigComponents\ComponentAttributes(");
+        ->write('$slots,[' . PHP_EOL)
+        ->write("'slot' => new  " . SlotBag::class . " (\$slot),\n")
+        ->write("'attributes' => new " . AttributesBag::class . "(");
 
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);

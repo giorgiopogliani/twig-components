@@ -7,7 +7,7 @@ use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
 
-class ComponentAttributes implements ArrayAccess, IteratorAggregate
+class AttributesBag implements ArrayAccess, IteratorAggregate
 {
     /**
      * The raw array of attributes.
@@ -47,7 +47,7 @@ class ComponentAttributes implements ArrayAccess, IteratorAggregate
      */
     public function get($key, $default = null)
     {
-        return $this->attributes[$key] ?? $default;
+        return new \Performing\TwigComponents\SlotBag($this->attributes[$key] ?? $default);
     }
 
     /**

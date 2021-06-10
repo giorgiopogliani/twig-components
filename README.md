@@ -4,7 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/giorgiopogliani/twig-components/Tests)](https://github.com/giorgiopogliani/twig-components/actions?query=workflow%3ATests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/performing/twig-components)
 
-This is a twig extension for automatically create components as tags. The name of the tag is based on files in a directory. This is highly inspired from blade components.  
+This is a twig extension for automatically create components as tags. The name of the tag is based on the filename and the path. This is highly inspired from laravel blade components.  
 
 ## Installation
 
@@ -14,25 +14,68 @@ You can install the package via composer:
 composer require performing/twig-components
 ```
 
-You can create the twig extension that will find all the files in the given directory.
+## Setup
+**Update!** You can use just this line of code to setup the extension, this will enable: 
+- components from the specified directory
+- safe filters so no need to use `|raw`
+- html-like as x-tags
+```php
+\Performing\TwigComponents\Setup::init($twig, '/relative/directory/to/components');
+```
+
+You want can still use the old method:
 ```php
 $extension = new \Performing\TwigComponents\ComponentExtension('/relative/twig/components/directory');
-$twig->addExtension($extension);
+$twig->addExtension($extension); 
 ```
 
 ## Syntax
+
+You can use a component `component-name.twig` like this anywhere in your templates. 
 ```twig
 {% x:component-name with {any: 'param'} %}
     <strong>Any Content</strong>
 {% endx %}
 ```
 
-You can also reach for components files that are in subfolders with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
+You can also reach for components files that are in **sub-folders** with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
 ```twig
 {% x:button.primary with {any: 'param'} %}
     <strong>Any Content</strong>
 {% endx %}
 ```
+
+## Components
+You can create a file in the components directory like this:
+```html
+{# /components/button.twig #}
+<button {{ attributes.merge({ class:'text-white rounded-md px-4 py-2' }) }}>
+  {{ slot }}
+</button>
+```
+
+Next, use the new component anywhere in your templates with this syntax or with x-tags.
+```twig
+{# /index.twig #}
+{% x:button with {class:'bg-blue-600'} %}
+  <span class="text-lg">Click here!</span>
+{% endx %}
+
+{# or #}
+
+<x-button class='bg-blue-600'>
+  <span class="text-lg">Click here!</span>
+</x-button>
+```
+
+The output generated will be like this.
+```html
+<button class="bg-blue-600 text-white rounded-md px-4 py-2">
+  <span class="text-lg">Click here!</span>
+</button>
+```
+
+## Features
 
 ### Slots (0.2.0)
 ```twig
@@ -95,57 +138,20 @@ $twig->setLexer(new Performing\TwigComponents\ComponentLexer($twig));
 **Keep in mind** that you should set the lexer after you register all your twig extensions.
 
 ### Craft CMS
-For example in Craft CMS you should do somethind like this: 
+For example in Craft CMS you should do something like this. The `if` statement ensure you don't get `'Unable to register extension "..." as extensions have already been initialized'` as error.
 ```php
-if (Craft::$app->request->getIsSiteRequest()) {
-    Craft::$app->view->registerTwigExtension(
-        new \Performing\TwigComponents\ComponentExtension('/components')
-    );
+// Module.php
 
-    // Enable x-tags syntax
-    $twig = Craft::$app->getView()->getTwig();
-    $twig->setLexer(new \Performing\TwigComponents\ComponentLexer($twig));
-```
-If you get 'Unable to register extension "..." as extensions have already been initialized' try like this.
-```php
-if (Craft::$app->request->getIsSiteRequest()) {
-    Craft::$app->view->registerTwigExtension(
-        new \Performing\TwigComponents\ComponentExtension('/components')
-    );
-        
+if (Craft::$app->request->getIsSiteRequest()) {    
     Event::on(
         Plugins::class,
         Plugins::EVENT_AFTER_LOAD_PLUGINS,
         function (Event $event) {
             $twig = Craft::$app->getView()->getTwig();
-            $twig->setLexer(new \Performing\TwigComponents\ComponentLexer($twig));
+            \Performing\TwigComponents\Setup::init($twig, '/components');
         }
     );
 }
-```
-
-### Components
-You can create a file in the components directory like this.
-```twig
-{# /components/button.twig #}
-<button {{ attributes.merge({ class:'text-white rounded-md px-4 py-2' })|raw }}>
-  {{ slot }}
-</button>
-```
-
-Use the new created tag.
-```twig
-{# /index.twig #}
-{% x:button with {class:'bg-blue-600'} %}
-  <span class="text-lg">Click here!</span>
-{% endx %}
-```
-
-The output generated will be like this.
-```html
-<button class="bg-blue-600 text-white rounded-md px-4 py-2">
-  <span class="text-lg">Click here!</span>
-</button>
 ```
 
 ## Testing

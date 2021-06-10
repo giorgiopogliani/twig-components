@@ -17,9 +17,10 @@ final class SlotNode extends Node implements NodeOutputInterface
     {
         $name = $this->getAttribute('name');
 
-        $compiler->raw(";\n")
-            ->write('$context["slots"] = array_merge($context["slots"], [ "' . $name . '" => new \Performing\TwigComponents\SlotClosure(function () use ($context, $macros, $blocks) {')
+        $compiler
+            ->write('ob_start();')
             ->subcompile($this->getNode('body'))
-            ->write("})]);\n\n");
+            ->write('$body = ob_get_clean();' . PHP_EOL)
+            ->write("\$slots['$name'] = new " . SlotBag::class . "(\$body);");
     }
 }

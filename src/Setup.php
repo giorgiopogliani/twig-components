@@ -10,7 +10,8 @@ class Setup
     {
         $twig->addExtension(new ComponentExtension($relativePaths));
 
-        $twig->setLexer((new ComponentLexer($twig))
+        $twig->setLexer(
+            (new ComponentLexer($twig))
             ->withConfig($config)
         );
 

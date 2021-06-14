@@ -29,7 +29,7 @@ class ComponentTagCompiler
 
     public function withConfig($config = null)
     {
-        if (!\is_null($config)) {
+        if (! \is_null($config)) {
             $this->config = $config;
         }
 
@@ -103,7 +103,7 @@ class ComponentTagCompiler
                 $attributes = $this->getAttributesFromAttributeString($matches['attributes']);
                 $name = $matches[1];
 
-                if (!\is_null($this->config)) {
+                if (! \is_null($this->config)) {
                     $name = $this->parseConfig($name);
                 }
 
@@ -175,7 +175,7 @@ class ComponentTagCompiler
                 $attributes = $this->getAttributesFromAttributeString($matches['attributes']);
                 $name = $matches[1];
 
-                if (!\is_null($this->config)) {
+                if (! \is_null($this->config)) {
                     $name = $this->parseConfig($name);
                 }
 

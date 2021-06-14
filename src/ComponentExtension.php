@@ -7,20 +7,31 @@ use Twig\Extension\AbstractExtension;
 class ComponentExtension extends AbstractExtension
 {
     /**
-     * @var string
+     * @var []
      */
-    private $relativePath;
+    private $relativePaths = [];
 
-    public function __construct(string $relativePath)
+    public function __construct($relativePaths)
     {
-        $this->relativePath = rtrim($relativePath, DIRECTORY_SEPARATOR);
+        if (\is_string($relativePaths)) {
+            $this->relativePaths[] = rtrim($relativePaths, DIRECTORY_SEPARATOR);
+        } else {
+            foreach ($relativePaths as $relativePath) {
+                $this->relativePaths[] = rtrim($relativePath, DIRECTORY_SEPARATOR);
+            }
+        }
     }
 
     public function getTokenParsers()
     {
-        return [
-            new ComponentTokenParser($this->relativePath),
+        $parsers = [
             new SlotTokenParser(),
         ];
+
+        foreach ($this->relativePaths as $relativePath) {
+            $parsers[] = new ComponentTokenParser($relativePath);
+        }
+
+        return $parsers;
     }
 }

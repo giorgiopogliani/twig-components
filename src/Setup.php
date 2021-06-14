@@ -6,11 +6,13 @@ use Twig\Environment;
 
 class Setup
 {
-    public static function init(Environment $twig, $relativePath)
+    public static function init(Environment $twig, $relativePaths, $config = null)
     {
-        $twig->addExtension(new ComponentExtension($relativePath));
+        $twig->addExtension(new ComponentExtension($relativePaths));
 
-        $twig->setLexer(new ComponentLexer($twig));
+        $twig->setLexer((new ComponentLexer($twig))
+            ->withConfig($config)
+        );
 
         /** @var \Twig\Extension\EscaperExtension */
         $escaper = $twig->getExtension(\Twig\Extension\EscaperExtension::class);

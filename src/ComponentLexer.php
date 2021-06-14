@@ -8,6 +8,8 @@ use Twig\TokenStream;
 
 class ComponentLexer extends Lexer
 {
+    protected $config;
+
     public function tokenize(Source $source): TokenStream
     {
         $preparsed = $this->preparse($source->getCode());
@@ -23,6 +25,17 @@ class ComponentLexer extends Lexer
 
     protected function preparse(string $value): string
     {
-        return (new ComponentTagCompiler($value))->compile();
+        return (new ComponentTagCompiler($value))
+            ->withConfig($this->config)
+            ->compile();
+    }
+
+    public function withConfig($config = null)
+    {
+        if (!\is_null($config)) {
+            $this->config = $config;
+        }
+
+        return $this;
     }
 }

@@ -9,6 +9,7 @@ namespace Performing\TwigComponents;
 class ComponentTagCompiler
 {
     protected $source;
+    protected $config;
 
     public function __construct(string $source)
     {
@@ -24,6 +25,15 @@ class ComponentTagCompiler
         $value = $this->compileClosingTags($value);
 
         return $value;
+    }
+
+    public function withConfig($config = null)
+    {
+        if (!\is_null($config)) {
+            $this->config = $config;
+        }
+
+        return $this;
     }
 
     /**
@@ -93,6 +103,10 @@ class ComponentTagCompiler
                 $attributes = $this->getAttributesFromAttributeString($matches['attributes']);
                 $name = $matches[1];
 
+                if (!\is_null($this->config)) {
+                    $name = $this->parseConfig($name);
+                }
+
                 return "{% x:$name with $attributes %}";
             },
             $value
@@ -160,6 +174,10 @@ class ComponentTagCompiler
             function (array $matches) {
                 $attributes = $this->getAttributesFromAttributeString($matches['attributes']);
                 $name = $matches[1];
+
+                if (!\is_null($this->config)) {
+                    $name = $this->parseConfig($name);
+                }
 
                 return "{% x:$name with $attributes %}{% endx %}";
             },
@@ -255,5 +273,14 @@ class ComponentTagCompiler
         /x";
 
         return preg_replace($pattern, ' :attributes="$1"', $attributeString);
+    }
+
+    public function parseConfig($name)
+    {
+        if (isset($this->config[$name])) {
+            return $name;
+        }
+
+        return $this->config[$name];
     }
 }

@@ -275,6 +275,12 @@ class ComponentTagCompiler
         return preg_replace($pattern, ' :attributes="$1"', $attributeString);
     }
 
+    /**
+     * Check if the config contains the requested element. If not, return the name.
+     *
+     * @param $name
+     * @return mixed
+     */
     public function parseConfig($name)
     {
         if (isset($this->config[$name])) {

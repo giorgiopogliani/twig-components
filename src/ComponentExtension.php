@@ -24,13 +24,14 @@ class ComponentExtension extends AbstractExtension
 
     public function getTokenParsers()
     {
-        $parsers = [
-            new SlotTokenParser(),
-        ];
+        $parsers = [];
 
         foreach ($this->relativePaths as $relativePath) {
             $parsers[] = new ComponentTokenParser($relativePath);
         }
+
+        // Not actually sure if this needs to be here, but trying to keep the old order.
+        $parsers[] = new SlotTokenParser();
 
         return $parsers;
     }

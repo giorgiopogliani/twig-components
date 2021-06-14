@@ -101,7 +101,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
             $values = array_filter(
                 $this->attributes,
                 function ($key) use ($keys) {
-                    return !in_array($key, $keys);
+                    return ! in_array($key, $keys);
                 },
                 ARRAY_FILTER_USE_KEY
             );

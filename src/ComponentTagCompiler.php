@@ -283,7 +283,7 @@ class ComponentTagCompiler
      */
     public function parseConfig($name)
     {
-        if (isset($this->config[$name])) {
+        if (!isset($this->config[$name])) {
             return $name;
         }
 

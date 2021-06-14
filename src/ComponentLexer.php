@@ -32,7 +32,7 @@ class ComponentLexer extends Lexer
 
     public function withConfig($config = null)
     {
-        if (!\is_null($config)) {
+        if (! \is_null($config)) {
             $this->config = $config;
         }
 

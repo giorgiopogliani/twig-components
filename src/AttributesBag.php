@@ -44,7 +44,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
      * @param mixed $default
      * @return mixed
      */
-    public function get($key, $default = null)
+    public function get($key, $default = '')
     {
         return new \Performing\TwigComponents\SlotBag($this->attributes[$key] ?? $default);
     }

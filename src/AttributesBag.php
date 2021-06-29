@@ -84,6 +84,31 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
 
         return new static($values);
     }
+    
+    /**
+     * Exclude the attributes given from the attribute array.
+     *
+     * @param mixed|array keys
+     * @return static
+     */
+    public function except($keys)
+    {
+        if (is_null($keys)) {
+            $values = $this->attributes;
+        } else {
+            $keys = is_array($keys) ? $keys : [$keys];
+
+            $values = array_filter(
+                $this->attributes,
+                function ($key) use ($keys) {
+                    return ! in_array($key, $keys);
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+        }
+
+        return new static($values);
+    }
 
     /**
      * Merge additional attributes / values into the attribute bag.

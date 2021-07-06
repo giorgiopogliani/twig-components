@@ -93,4 +93,20 @@ class ComponentTest extends TestCase
         <button class="'text-white' bg-blue-800 rounded"> test3 </button>
         HTML, $html);
     }
+
+    /** @test */
+    public function render_component_with_attributes()
+    {
+        $twig = $this->setupTwig();
+
+        $html = $twig->render('test_with_attributes.twig');
+
+        $this->assertEquals(<<<HTML
+        <div>
+         1
+         {"foo":1}
+         bar
+        </div>
+        HTML, $html);
+    }
 }

@@ -46,7 +46,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
      */
     public function get($key, $default = '')
     {
-        return new \Performing\TwigComponents\SlotBag($this->attributes[$key] ?? $default);
+        return $this->attributes[$key] ?? $default;
     }
 
     /**
@@ -84,7 +84,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
 
         return new static($values);
     }
-    
+
     /**
      * Exclude the attributes given from the attribute array.
      *

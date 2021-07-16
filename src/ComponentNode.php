@@ -30,6 +30,7 @@ final class ComponentNode extends IncludeNode
 
         $compiler
             ->write(sprintf("if ($%s) {\n", $template))
+            ->write('$oldSlots = $slots ?? [];' . PHP_EOL)
             ->write('$slots = [];' . PHP_EOL)
             ->write("ob_start();"  . PHP_EOL)
             ->subcompile($this->getNode('slot'))
@@ -41,6 +42,7 @@ final class ComponentNode extends IncludeNode
 
         $compiler
             ->raw(");\n")
+            ->write('$slots = $oldSlots;' . PHP_EOL)
             ->write("}\n")
         ;
     }

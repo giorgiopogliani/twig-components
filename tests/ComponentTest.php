@@ -81,6 +81,18 @@ class ComponentTest extends TestCase
     }
 
     /** @test */
+    public function render_nested_xtags_with_slots()
+    {
+        $twig = $this->setupTwig();
+
+        $html = $twig->render('test_nested_xtags_with_slots.twig');
+
+        $this->assertEquals(<<<HTML
+        <div><span>[outer name]</span><div>[inner name][inner slot]</div></div>
+        HTML, $html);
+    }
+
+    /** @test */
     public function render_component_with_xtags()
     {
         $twig = $this->setupTwig();

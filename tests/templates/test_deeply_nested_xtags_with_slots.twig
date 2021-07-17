@@ -1,0 +1,15 @@
+<x-with-slots>
+    <x-slot name="name"><span>A</span></x-slot>
+    <x-with-slots>
+        <x-slot name="name">B</x-slot>
+        C
+        <x-with-slots>
+            <x-button>E</x-button>
+            <x-slot name="name">D</x-slot>
+            <x-with-slots>
+                <x-slot name="name">F</x-slot>
+                G
+            </x-with-slots>
+        </x-with-slots>
+    </x-with-slots>
+</x-with-slots>

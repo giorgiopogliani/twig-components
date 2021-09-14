@@ -13,6 +13,8 @@ class ComponentTest extends TestCase
     {
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
 
+        $loader->addPath(__DIR__ . '/namespace-templates', 'ns');
+
         $twig = new \Twig\Environment($loader, [
             'cache' => false,
         ]);
@@ -121,6 +123,28 @@ class ComponentTest extends TestCase
          {"foo":1}
          bar
         </div>
+        HTML, $html);
+    }
+
+    /** @test */
+    public function render_namespaced_component()
+    {
+        $html = $this->twig->render('test_namespaced_component.twig');
+
+        $this->assertEquals(<<<HTML
+        <button class="bg-blue-600 ns-button text-white"> test </button>
+        HTML, $html);
+    }
+
+    /** @test */
+    public function render_namespaced_xtags_component()
+    {
+        $html = $this->twig->render('test_namespaced_xtags_component.twig');
+
+        $this->assertEquals(<<<HTML
+        <button class="bg-blue-600 ns-button text-white"> test1 </button>
+        <button class="bg-blue-600 ns-button text-white"> test2 </button>
+        <button class="'bg-blue-600' ns-button text-white"> test3 </button>
         HTML, $html);
     }
 }

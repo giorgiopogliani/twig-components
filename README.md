@@ -174,7 +174,7 @@ components can be included with the following:
 
 <x-ns:button class='bg-blue-600'>
   <span class="text-lg">Click here!</span>
-</x-button>
+</x-ns:button>
 ```
 
 ## Testing

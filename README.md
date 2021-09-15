@@ -154,6 +154,29 @@ if (Craft::$app->request->getIsSiteRequest()) {
 }
 ```
 
+### Twig Namespaces
+
+In addition to the specified directory, you can also reference components from a twig namespace by prepending the namespace and a `:` to the component name. With a namespace defined like so:
+
+```php
+// register namespace with twig template loader
+$loader->addPath(__DIR__ . '/some/other/dir', 'ns');
+```
+
+components can be included with the following:
+
+```twig
+{% x:ns:button with {class:'bg-blue-600'} %}
+  <span class="text-lg">Click here!</span>
+{% endx %}
+
+{# or #}
+
+<x-ns:button class='bg-blue-600'>
+  <span class="text-lg">Click here!</span>
+</x-ns:button>
+```
+
 ## Testing
 
 ```bash

@@ -26,6 +26,9 @@ final class ComponentTokenParser extends IncludeTokenParser
 
     public function getComponentPath(string $name)
     {
+        if (strpos( $name, '@' ) === 0) {
+            return $name . '.twig';
+        }
         return rtrim($this->path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . '.twig';
     }
 
@@ -65,24 +68,40 @@ final class ComponentTokenParser extends IncludeTokenParser
         $stream = $this->parser->getStream();
 
         $path = [];
-        do {
-            if ($this->parser->getCurrentToken()->getType() != /** Token::NAME_TYPE */ 5) {
-                throw new Exception('First token must be a name type');
-            }
 
-            $name = $stream->next()->getValue();
+        if ($this->parser->getCurrentToken()->getType() != /** Token::NAME_TYPE */ 5) {
+            throw new Exception('First token must be a name type');
+        }
 
-            while ($stream->nextIf(Token::OPERATOR_TYPE, '-')) {
-                $token = $stream->nextIf(Token::NAME_TYPE);
-                if (! is_null($token)) {
-                    $name .= '-' . $token->getValue();
-                }
-            }
+        $name = $this->getNameSection();
 
-            $path[] = $name;
-        } while ($stream->nextIf(9 /** Token::PUNCTUATION_TYPE */, '.'));
+        if ( $stream->nextIf(Token::PUNCTUATION_TYPE, ':') ) {
+            $path[] = '@' . $name;
+            $name   = $this->getNameSection();
+        }
+
+        $path[] = $name;
+
+        while ($stream->nextIf(9 /** Token::PUNCTUATION_TYPE */, '.')) {
+            $path[] = $this->getNameSection();
+        }
 
         return implode('/', $path);
+    }
+
+    public function getNameSection(): string {
+        $stream = $this->parser->getStream();
+
+        $name = $stream->next()->getValue();
+
+        while ($stream->nextIf(Token::OPERATOR_TYPE, '-')) {
+            $token = $stream->nextIf(Token::NAME_TYPE);
+            if (! is_null( $token )) {
+                $name .= '-' . $token->getValue();
+            }
+        }
+
+        return $name;
     }
 
     public function decideBlockEnd(Token $token): bool

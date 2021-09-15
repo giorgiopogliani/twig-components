@@ -26,9 +26,10 @@ final class ComponentTokenParser extends IncludeTokenParser
 
     public function getComponentPath(string $name)
     {
-        if (strpos( $name, '@' ) === 0) {
+        if (strpos($name, '@') === 0) {
             return $name . '.twig';
         }
+
         return rtrim($this->path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . '.twig';
     }
 
@@ -75,9 +76,9 @@ final class ComponentTokenParser extends IncludeTokenParser
 
         $name = $this->getNameSection();
 
-        if ( $stream->nextIf(Token::PUNCTUATION_TYPE, ':') ) {
+        if ($stream->nextIf(Token::PUNCTUATION_TYPE, ':')) {
             $path[] = '@' . $name;
-            $name   = $this->getNameSection();
+            $name = $this->getNameSection();
         }
 
         $path[] = $name;
@@ -89,14 +90,15 @@ final class ComponentTokenParser extends IncludeTokenParser
         return implode('/', $path);
     }
 
-    public function getNameSection(): string {
+    public function getNameSection(): string
+    {
         $stream = $this->parser->getStream();
 
         $name = $stream->next()->getValue();
 
         while ($stream->nextIf(Token::OPERATOR_TYPE, '-')) {
             $token = $stream->nextIf(Token::NAME_TYPE);
-            if (! is_null( $token )) {
+            if (! is_null($token)) {
                 $name .= '-' . $token->getValue();
             }
         }

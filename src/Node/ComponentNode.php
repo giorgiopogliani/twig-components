@@ -1,12 +1,15 @@
 <?php
 
-namespace Performing\TwigComponents;
+namespace Performing\TwigComponents\Node;
 
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
+
+use Performing\TwigComponents\View\ComponentAttributeBag;
+use Performing\TwigComponents\View\ComponentSlot;
 
 final class ComponentNode extends IncludeNode
 {
@@ -78,8 +81,8 @@ final class ComponentNode extends IncludeNode
         ->write("\n")
         ->write("array_merge(\n")
         ->write('$slots,[' . PHP_EOL)
-        ->write("'slot' => new  " . SlotBag::class . " (\$slot),\n")
-        ->write("'attributes' => new " . AttributesBag::class . "(");
+        ->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")
+        ->write("'attributes' => new " . ComponentAttributeBag::class . "(");
 
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);

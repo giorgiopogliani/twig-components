@@ -1,8 +1,11 @@
 <?php
 
-namespace Performing\TwigComponents;
+namespace Performing\TwigComponents\Extension;
 
 use Twig\Extension\AbstractExtension;
+
+use Performing\TwigComponents\TokenParser\ComponentTokenParser;
+use Performing\TwigComponents\TokenParser\SlotTokenParser;
 
 class ComponentExtension extends AbstractExtension
 {

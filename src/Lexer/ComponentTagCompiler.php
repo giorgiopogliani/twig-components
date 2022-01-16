@@ -1,10 +1,11 @@
 <?php
 
-namespace Performing\TwigComponents;
+namespace Performing\TwigComponents\Lexer;
 
 /**
- * Transforms <x-tags /> to twig component tags
- * Most parts shamelessly stolen form Laravel's ComponentTagCompiler
+ * Content of this file is mostly taken from Laravel Component Tag Compiler.
+ *
+ * https://github.com/illuminate/view/blob/master/Compilers/ComponentTagCompiler.php
  */
 class ComponentTagCompiler
 {
@@ -34,14 +35,51 @@ class ComponentTagCompiler
      */
     public function compileSlots(string $value)
     {
-        $value = preg_replace_callback('/<\s*x[\-\:]slot\s+(:?)name=(?<name>(\"[^\"]+\"|\\\'[^\\\']+\\\'|[^\s>]+))\s*>/', function ($matches) {
-            $name = $this->stripQuotes($matches['name']);
+        $pattern = "/
+            <
+                \s*
+                x[\-\:]slot
+                \s+
+                (:?)name=(?<name>(\"[^\"]+\"|\\\'[^\\\']+\\\'|[^\s>]+))
+                (?<attributes>
+                    (?:
+                        \s+
+                        (?:
+                            (?:
+                                \{\{\s*\\\$attributes(?:[^}]+?)?\s*\}\}
+                            )
+                            |
+                            (?:
+                                [\w\-:.@]+
+                                (
+                                    =
+                                    (?:
+                                        \\\"[^\\\"]*\\\"
+                                        |
+                                        \'[^\']*\'
+                                        |
+                                        [^\'\\\"=<>]+
+                                    )
+                                )?
+                            )
+                        )
+                    )*
+                    \s*
+                )
+                (?<![\/=\-])
+            >
+        /x";
 
-            return "{% slot:$name %}";
+        $value = preg_replace_callback($pattern, function ($matches) {
+            $name = $this->stripQuotes($matches['name']);
+            $attributes = $this->getAttributesFromAttributeString($matches['attributes'] ?? []);
+
+            return "{% slot:{$name} with {$attributes} %}";
         }, $value);
 
         return preg_replace('/<\/\s*x[\-\:]slot[^>]*>/', '{% endslot %}', $value);
     }
+
 
     /**
      * Compile the opening tags within the given string.

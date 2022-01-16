@@ -4,6 +4,11 @@ namespace Performing\TwigComponents;
 
 use Twig\Environment;
 
+use Performing\TwigComponents\Extension\ComponentExtension;
+use Performing\TwigComponents\Lexer\ComponentLexer;
+use Performing\TwigComponents\View\ComponentAttributeBag;
+use Performing\TwigComponents\View\ComponentSlot;
+
 class Setup
 {
     public static function init(Environment $twig, $relativePath)
@@ -14,8 +19,8 @@ class Setup
 
         /** @var \Twig\Extension\EscaperExtension */
         $escaper = $twig->getExtension(\Twig\Extension\EscaperExtension::class);
-        $escaper->addSafeClass(AttributesBag::class, ['all']);
-        $escaper->addSafeClass(SlotBag::class, ['all']);
+        $escaper->addSafeClass(ComponentAttributeBag::class, ['all']);
+        $escaper->addSafeClass(ComponentSlot::class, ['all']);
 
         return $twig;
     }

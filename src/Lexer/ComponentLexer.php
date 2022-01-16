@@ -1,6 +1,6 @@
 <?php
 
-namespace Performing\TwigComponents;
+namespace Performing\TwigComponents\Lexer;
 
 use Twig\Lexer;
 use Twig\Source;

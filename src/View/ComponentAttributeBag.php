@@ -1,12 +1,12 @@
 <?php
 
-namespace Performing\TwigComponents;
+namespace Performing\TwigComponents\View;
 
 use ArrayAccess;
 use ArrayIterator;
 use IteratorAggregate;
 
-class AttributesBag implements ArrayAccess, IteratorAggregate
+class ComponentAttributeBag implements ArrayAccess, IteratorAggregate
 {
     /**
      * The raw array of attributes.
@@ -134,24 +134,6 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
     }
 
     /**
-     * Determine if the specific attribute value should be escaped.
-     *
-     * @param bool $escape
-     * @param mixed $value
-     * @return bool
-     */
-    protected function shouldEscapeAttributeValue($escape, $value)
-    {
-        if (! $escape) {
-            return false;
-        }
-
-        return ! is_object($value) &&
-            ! is_null($value) &&
-            ! is_bool($value);
-    }
-
-    /**
      * Get all of the raw attributes.
      *
      * @return array
@@ -187,7 +169,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
      * @param string $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return isset($this->attributes[$offset]);
     }
@@ -210,7 +192,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
      * @param mixed $value
      * @return void
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         $this->attributes[$offset] = $value;
     }
@@ -221,7 +203,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
      * @param string $offset
      * @return void
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         unset($this->attributes[$offset]);
     }
@@ -231,7 +213,7 @@ class AttributesBag implements ArrayAccess, IteratorAggregate
      *
      * @return \ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->attributes);
     }

@@ -2,12 +2,12 @@
 
 namespace Performing\TwigComponents;
 
-use Twig\Environment;
-
 use Performing\TwigComponents\Extension\ComponentExtension;
+
 use Performing\TwigComponents\Lexer\ComponentLexer;
 use Performing\TwigComponents\View\ComponentAttributeBag;
 use Performing\TwigComponents\View\ComponentSlot;
+use Twig\Environment;
 
 class Setup
 {

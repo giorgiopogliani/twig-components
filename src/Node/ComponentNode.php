@@ -2,14 +2,14 @@
 
 namespace Performing\TwigComponents\Node;
 
+use Performing\TwigComponents\View\ComponentAttributeBag;
+use Performing\TwigComponents\View\ComponentSlot;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
+
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
-
-use Performing\TwigComponents\View\ComponentAttributeBag;
-use Performing\TwigComponents\View\ComponentSlot;
 
 final class ComponentNode extends IncludeNode
 {

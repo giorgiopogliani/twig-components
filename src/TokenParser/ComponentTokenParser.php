@@ -3,10 +3,10 @@
 namespace Performing\TwigComponents\TokenParser;
 
 use Exception;
+use Performing\TwigComponents\Node\ComponentNode;
 use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\IncludeTokenParser;
-use Performing\TwigComponents\Node\ComponentNode;
 
 final class ComponentTokenParser extends IncludeTokenParser
 {

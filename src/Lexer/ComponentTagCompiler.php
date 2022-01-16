@@ -80,7 +80,6 @@ class ComponentTagCompiler
         return preg_replace('/<\/\s*x[\-\:]slot[^>]*>/', '{% endslot %}', $value);
     }
 
-
     /**
      * Compile the opening tags within the given string.
      *

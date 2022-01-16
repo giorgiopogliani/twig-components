@@ -2,10 +2,10 @@
 
 namespace Performing\TwigComponents\Extension;
 
-use Twig\Extension\AbstractExtension;
-
 use Performing\TwigComponents\TokenParser\ComponentTokenParser;
+
 use Performing\TwigComponents\TokenParser\SlotTokenParser;
+use Twig\Extension\AbstractExtension;
 
 class ComponentExtension extends AbstractExtension
 {

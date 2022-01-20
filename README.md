@@ -4,7 +4,7 @@
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/giorgiopogliani/twig-components/Tests)](https://github.com/giorgiopogliani/twig-components/actions?query=workflow%3ATests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/performing/twig-components)
 
-This is a twig extension for automatically create components as tags. The name of the tag is based on the filename and the path. This is highly inspired from laravel blade components.  
+This is a php package for automatically create twig components as tags. This is highly inspired from laravel blade components.  
 
 ## Installation
 
@@ -14,134 +14,25 @@ You can install the package via composer:
 composer require performing/twig-components
 ```
 
-## Setup
-**Update!** You can use just this line of code to setup the extension, this will enable: 
-- components from the specified directory
-- safe filters so no need to use `|raw`
-- html-like as x-tags
+## Configuration
+
+This package should work anywhere where twig is available.
+
 ```php
-\Performing\TwigComponents\Setup::init($twig, '/relative/directory/to/components');
+/** @var \Twig\Environment $twig */
+
+use Performing\TwigComponents\Setup;
+
+Setup::init($twig, '/relative/directory/to/components');
 ```
 
-You want can still use the old method:
-```php
-$extension = new \Performing\TwigComponents\ComponentExtension('/relative/twig/components/directory');
-$twig->addExtension($extension); 
-```
+To enable the package just pass your twig environment object to the function and specify your components folder relative to your twig templates folder.
 
-## Syntax
+### Example Craft MS
 
-You can use a component `component-name.twig` like this anywhere in your templates. 
-```twig
-{% x:component-name with {any: 'param'} %}
-    <strong>Any Content</strong>
-{% endx %}
-```
-
-You can also reach for components files that are in **sub-folders** with a dot-notation syntax. For example, a component at `/components/button/primary.twig` would become
-```twig
-{% x:button.primary with {any: 'param'} %}
-    <strong>Any Content</strong>
-{% endx %}
-```
-
-## Components
-You can create a file in the components directory like this:
-```html
-{# /components/button.twig #}
-<button {{ attributes.merge({ class:'text-white rounded-md px-4 py-2' }) }}>
-  {{ slot }}
-</button>
-```
-
-Next, use the new component anywhere in your templates with this syntax or with x-tags.
-```twig
-{# /index.twig #}
-{% x:button with {class:'bg-blue-600'} %}
-  <span class="text-lg">Click here!</span>
-{% endx %}
-
-{# or #}
-
-<x-button class='bg-blue-600'>
-  <span class="text-lg">Click here!</span>
-</x-button>
-```
-
-The output generated will be like this.
-```html
-<button class="bg-blue-600 text-white rounded-md px-4 py-2">
-  <span class="text-lg">Click here!</span>
-</button>
-```
-
-## Features
-
-### Slots (0.2.0)
-```twig
-{% x:card %}
-   {% slot:title %} Some Title {% endslot %}
-    
-    Some content {# normal slot variable #}
-   
-   {% slot:buttons %}  
-       {% x:button.primary %} Submit {% endx %}
-   {% endslot %}
-{% endx %}
-```
-
-### Pro Tip (VSCode)
-Add this your user twig.json snippets 
-```
-"Component": {
-  "prefix": "x:",
-  "body": [
-    "{% x:$1 %}",
-    "$2",
-    "{% endx %}",
-  ],
-  "description": "Twig component"
-}
-```
-
-### X Tags (0.3.0)
-Now, you can enable `<x-tags />` for your twig components, here an example: 
-```html
-<x-button>
-    <x-slot name="icon">
-        <!-- my icon -->
-    </x-slot>
-    Submit
-</x-button>
-```
-
-You can pass attributes like this:
-```html
-<x-button 
-    :any="'evaluate' ~ 'twig'"
-    other="{{'this' ~ 'works' ~ 'too'}}" 
-    another="or this"
-    not-this="{{'this' ~ 'does'}}{{ 'not work' }}"
->
-    <x-slot name="icon">
-        <!-- my icon -->
-    </x-slot>
-    Submit
-</x-button>
-```
-
-To enable this feature you need to set the lexer on your twig enviroment. 
-```php
-$twig->setLexer(new Performing\TwigComponents\ComponentLexer($twig));
-```
-
-**Keep in mind** that you should set the lexer after you register all your twig extensions.
-
-### Craft CMS
-For example in Craft CMS you should do something like this. The `if` statement ensure you don't get `'Unable to register extension "..." as extensions have already been initialized'` as error.
+In Craft CMS you should do something like this. The `if` statement ensure you don't get `'Unable to register extension "..." as extensions have already been initialized'` as error.
 ```php
 // Module.php
-
 if (Craft::$app->request->getIsSiteRequest()) {    
     Event::on(
         Plugins::class,
@@ -153,6 +44,117 @@ if (Craft::$app->request->getIsSiteRequest()) {
     );
 }
 ```
+
+
+## Usage
+
+The components are just twig templates in a folder of your chioce (e.g. `components`) and can be used anywhere in your twig templates. The slot variable is any content you will add between the opening and the close tag.
+
+```html
+{# /components/button.twig #}
+<button>
+  {{ slot }}
+</button>
+```
+
+### Custom syntax
+
+To reach a component you need to use custom tag `x` followed by a `:`  and the filename of your component.
+```twig
+{# /index.twig #}
+{% x:button %}
+    <strong>Click me</strong>
+{% endx %}
+```
+
+You can also pass any params like you would using an `include`. The benefit is that you will avilable a powerfull variable named `attributes` to merge attributes or change you component behaviour.
+```twig
+{# /index.twig #}
+{% x:button with {'class' : 'text-white'} %}
+    <strong>Click me</strong>
+{% endx %}
+
+{# /components/button.twig #}
+<button {{ attributes.merge({ class: 'rounded px-4' }) }}>
+    {{ slot }}
+</button>
+
+{# Rendered #}
+<button class="text-white rounded-md px-4 py-2">
+    <strong>Click me</strong>
+</button>
+```
+
+To reach components that are in **sub-folders** you can use dot-notation syntax.
+```twig
+{# /components/button/primary.twig #}
+<button>
+    {{ slot }}
+</button>
+
+{# /index.twig #}
+{% x:button.primary %}
+    <strong>Click me</strong>
+{% endx %}
+```
+
+### Html lihe syntax
+The same behaviour can be obtained with a special html syntax. The previus component example can alse be used in this way.
+
+```twig
+{# /index.twig #}
+<x-button class='bg-blue-600'>
+  <span class="text-lg">Click here!</span>
+</x-button>
+```
+
+### Named slots
+```twig
+{# /components/card.twig #}
+<div {{ attributes.class('bg-white shadow p-3 rounded') }}>
+    <h2 {{ title.attributes.class('font-bold') }}>
+        {{ title }}
+    </h2>
+    <div>
+        {{ body }}
+    </div>
+</<div>
+
+{# /index.twig #}
+<x-card>
+    <x-slot name="title" class="text-2xl">Titile</x-slot>
+    <x-slot name="body" >Body text</x-slot>
+</x-card>
+```
+
+Also with the standard syntax.
+
+```twig
+{# /index.twig #}
+{% x:card %}
+    {% slot:title with {class: "text-2xl"}
+        Titile
+    {% endslot %}
+    {% slot:body
+        Titile
+    {% endslot %}
+{% endx %}
+```
+
+### Attributes
+You can pass any attribute to the component in different ways. To interprate the content as twig you need to prepend the attribute name with a `:` but it works also in other ways.
+
+```twig
+<x-button 
+    :any="'evaluate' ~ 'twig'"
+    other="{{'this' ~ 'works' ~ 'too'}}" 
+    another="or this"
+    this="{{'this' ~ 'does'}}{{ 'not work' }}"
+>
+    Submit
+</x-button>
+```
+
 
 ### Twig Namespaces
 
@@ -176,6 +178,12 @@ components can be included with the following:
   <span class="text-lg">Click here!</span>
 </x-ns:button>
 ```
+
+## Contributing
+Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
 
 ## Testing
 

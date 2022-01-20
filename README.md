@@ -67,7 +67,7 @@ To reach a component you need to use custom tag `x` followed by a `:`  and the f
 {% endx %}
 ```
 
-You can also pass any params like you would using an `include`. The benefit is that you will avilable a powerfull variable named `attributes` to merge attributes or change you component behaviour.
+You can also pass any params like you would using an `include`. The benefit is that you will have the powerful `attributes` variable to merge attributes or to change you component behaviour.
 ```twig
 {# /index.twig #}
 {% x:button with {'class' : 'text-white'} %}

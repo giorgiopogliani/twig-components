@@ -10,7 +10,6 @@ use Twig\Extension\AbstractExtension;
 
 class ComponentExtension extends AbstractExtension
 {
-
     private Configuration $options;
 
     public function __construct(Configuration $options)

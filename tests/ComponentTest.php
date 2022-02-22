@@ -16,7 +16,7 @@ class ComponentTest extends TestCase
         $loader->addPath(__DIR__ . '/namespace-templates', 'ns');
 
         $twig = new \Twig\Environment($loader, [
-            'cache' => false//__DIR__ . '/../cache',
+            'cache' => false,//__DIR__ . '/../cache',
         ]);
 
         Configuration::make($twig)

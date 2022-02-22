@@ -2,6 +2,7 @@
 
 namespace Performing\TwigComponents\Node;
 
+use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\View\ComponentAttributeBag;
 use Performing\TwigComponents\View\ComponentSlot;
 use Twig\Compiler;
@@ -13,10 +14,13 @@ use Twig\Node\Node;
 
 final class ComponentNode extends IncludeNode
 {
-    public function __construct(string $path, Node $slot, ?AbstractExpression $variables, int $lineno)
+    private Configuration $configuration;
+
+    public function __construct(string $path, Node $slot, ?AbstractExpression $variables, int $lineno, Configuration $configuration)
     {
         parent::__construct(new ConstantExpression('not_used', $lineno), $variables, false, false, $lineno, null);
 
+        $this->configuration = $configuration;
         $this->setAttribute('path', $path);
         $this->setNode('slot', $slot);
     }
@@ -39,16 +43,14 @@ final class ComponentNode extends IncludeNode
             ->write("ob_start();"  . PHP_EOL)
             ->subcompile($this->getNode('slot'))
             ->write('$slot = ob_get_clean();' . PHP_EOL)
-            ->write(sprintf('$%s->display(', $template))
-        ;
+            ->write(sprintf('$%s->display(', $template));
 
         $this->addTemplateArguments($compiler);
 
         $compiler
             ->raw(");\n")
             ->write('$slots = array_pop($slotsStack);' . PHP_EOL)
-            ->write("}\n")
-        ;
+            ->write("}\n");
     }
 
     protected function addGetTemplate(Compiler $compiler)
@@ -65,8 +67,7 @@ final class ComponentNode extends IncludeNode
             ->write('')
             ->repr($this->getTemplateLine())
             ->indent(-1)
-            ->raw(PHP_EOL . ');' . PHP_EOL . PHP_EOL)
-        ;
+            ->raw(PHP_EOL . ');' . PHP_EOL . PHP_EOL);
     }
 
     public function getTemplateName(): ?string
@@ -77,12 +78,12 @@ final class ComponentNode extends IncludeNode
     protected function addTemplateArguments(Compiler $compiler)
     {
         $compiler
-        ->indent(1)
-        ->write("\n")
-        ->write("array_merge(\n")
-        ->write('$slots,[' . PHP_EOL)
-        ->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")
-        ->write("'attributes' => new " . ComponentAttributeBag::class . "(");
+            ->indent(1)
+            ->write("\n")
+            ->write("array_merge(\n")
+            ->write('$slots,[' . PHP_EOL)
+            ->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")
+            ->write("'attributes' => new " . ComponentAttributeBag::class . "(");
 
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);
@@ -91,13 +92,17 @@ final class ComponentNode extends IncludeNode
         }
 
         $compiler->write(")\n")
-                ->indent(-1)
-                ->write("],");
+            ->indent(-1)
+            ->write("],");
 
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);
         } else {
             $compiler->raw('[]');
+        }
+
+        if ($this->configuration->isUsingGlobalContext()) {
+            $compiler->write(',$context');
         }
 
         $compiler->write(")\n");

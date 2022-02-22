@@ -2,6 +2,7 @@
 
 namespace Performing\TwigComponents\Extension;
 
+use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\TokenParser\ComponentTokenParser;
 
 use Performing\TwigComponents\TokenParser\SlotTokenParser;
@@ -9,20 +10,18 @@ use Twig\Extension\AbstractExtension;
 
 class ComponentExtension extends AbstractExtension
 {
-    /**
-     * @var string
-     */
-    private $relativePath;
 
-    public function __construct(string $relativePath)
+    private Configuration $options;
+
+    public function __construct(Configuration $options)
     {
-        $this->relativePath = rtrim($relativePath, DIRECTORY_SEPARATOR);
+        $this->options = $options;
     }
 
     public function getTokenParsers()
     {
         return [
-            new ComponentTokenParser($this->relativePath),
+            new ComponentTokenParser($this->options),
             new SlotTokenParser(),
         ];
     }

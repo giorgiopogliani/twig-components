@@ -2,7 +2,7 @@
 
 namespace Performing\TwigComponents\Tests;
 
-use Performing\TwigComponents\Setup;
+use Performing\TwigComponents\Configuration;
 use PHPUnit\Framework\TestCase;
 
 class ComponentTest extends TestCase
@@ -16,10 +16,14 @@ class ComponentTest extends TestCase
         $loader->addPath(__DIR__ . '/namespace-templates', 'ns');
 
         $twig = new \Twig\Environment($loader, [
-            'cache' => false,
+            'cache' => false//__DIR__ . '/../cache',
         ]);
 
-        Setup::init($twig, '/components');
+        Configuration::make($twig)
+            ->setTemplatesPath('_components')
+            ->setTemplatesExtension('twig')
+            ->useGlobalContext(false)
+            ->setup();
 
         return $twig;
     }
@@ -146,5 +150,17 @@ class ComponentTest extends TestCase
         <button class="bg-blue-600 ns-button text-white"> test2 </button>
         <button class="'bg-blue-600' ns-button text-white"> test3 </button>
         HTML, $html);
+    }
+
+    /** @test */
+    public function share_global_context_inside_components()
+    {
+        $template = $this->twig->createTemplate(<<<HTML
+        {% set foo = 'bar' %}
+        <x-global_context></x-global_context>
+        HTML);
+        $html = $template->render();
+
+        $this->assertEquals('bar', $html);
     }
 }

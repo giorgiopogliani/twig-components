@@ -28,9 +28,9 @@ Setup::init($twig, '/relative/directory/to/components');
 
 To enable the package just pass your Twig environment object to the function and specify your components folder relative to your Twig templates folder.
 
-### Example Craft MS
+### Craft CMS example
 
-In Craft CMS you should do something like this. The `if` statement ensure you don't get `'Unable to register extension "..." as extensions have already been initialized'` as error.
+In Craft CMS you should do something like this.
 
 ```php
 // Module.php
@@ -46,11 +46,13 @@ if (Craft::$app->request->getIsSiteRequest()) {
 }
 ```
 
+> The `if` statement ensure you don't get `'Unable to register extension "..." as extensions have already been initialized'` as error.
+
 ## Usage
 
 The components are just Twig templates in a folder of your choice (e.g. `components`) and can be used anywhere in your Twig templates. The slot variable is any content you will add between the opening and the close tag.
 
-```html
+```twig
 {# /components/button.twig #}
 <button>
     {{ slot }}
@@ -68,18 +70,18 @@ To reach a component you need to use custom tag `x` followed by a `:` and the fi
 {% endx %}
 ```
 
-You can also pass any params like you would using an `include`. The benefit is that you will have the powerful `attributes` variable to merge attributes or to change you component behaviour.
+You can also pass any params like you would using an `include`. The benefit is that you will have the powerful `attributes` variable to merge attributes or to change your component behaviour.
 
 ```twig
-{# /index.twig #}
-{% x:button with {'class': 'text-white'} %}
-    <strong>Click me</strong>
-{% endx %}
-
 {# /components/button.twig #}
 <button {{ attributes.merge({ class: 'rounded px-4' }) }}>
     {{ slot }}
 </button>
+
+{# /index.twig #}
+{% x:button with {'class': 'text-white'} %}
+    <strong>Click me</strong>
+{% endx %}
 
 {# Rendered #}
 <button class="text-white rounded-md px-4 py-2">
@@ -87,7 +89,7 @@ You can also pass any params like you would using an `include`. The benefit is t
 </button>
 ```
 
-To reach components that are in **sub-folders** you can use dot-notation syntax.
+To reach components that are in **sub-folders** you can use _dot-notation_ syntax.
 
 ```twig
 {# /components/button/primary.twig #}
@@ -137,10 +139,10 @@ Also with the standard syntax.
 ```twig
 {# /index.twig #}
 {% x:card %}
-    {% slot:title with {class: "text-2xl"}
+    {% slot:title with {class: "text-2xl"} %}
         Title
     {% endslot %}
-    {% slot:body
+    {% slot:body %}
         Title
     {% endslot %}
 {% endx %}

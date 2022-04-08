@@ -11,20 +11,16 @@ use Twig\TokenParser\IncludeTokenParser;
 
 final class ComponentTokenParser extends IncludeTokenParser
 {
-    /**
-     * @var String Directory for the components files.
-     */
-    private $path;
+    private Configuration $configuration;
 
     /**
      * ComponentTokenParser constructor.
      * @param string $tag
      * @param string $path
      */
-    public function __construct(Configuration $options = null)
+    public function __construct(Configuration $configuration)
     {
-        $this->configuration = $options;
-        $this->path = $this->configuration->getTemplatesPath();
+        $this->configuration = $configuration;
     }
 
     public function getComponentPath(string $name)
@@ -33,7 +29,7 @@ final class ComponentTokenParser extends IncludeTokenParser
             return $name . '.' . $this->configuration->getTemplatesExtension();
         }
 
-        return rtrim($this->path, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . '.' . $this->configuration->getTemplatesExtension();
+        return rtrim($this->configuration->getTemplatesPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . '.' . $this->configuration->getTemplatesExtension();
     }
 
     public function parse(Token $token): Node

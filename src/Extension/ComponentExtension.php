@@ -10,17 +10,17 @@ use Twig\Extension\AbstractExtension;
 
 class ComponentExtension extends AbstractExtension
 {
-    private Configuration $options;
+    private Configuration $configuration;
 
-    public function __construct(Configuration $options)
+    public function __construct(Configuration $configuration)
     {
-        $this->options = $options;
+        $this->configuration = $configuration;
     }
 
     public function getTokenParsers()
     {
         return [
-            new ComponentTokenParser($this->options),
+            new ComponentTokenParser($this->configuration),
             new SlotTokenParser(),
         ];
     }

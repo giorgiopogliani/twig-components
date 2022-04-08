@@ -23,8 +23,6 @@ final class ComponentNode extends IncludeNode
         $this->configuration = $configuration;
         $this->setAttribute('path', $path);
         $this->setNode('slot', $slot);
-        // TODO: Convert variables keys to camel case
-        $this->setNode('camelCaseVariables', $variables);
     }
 
     public function compile(Compiler $compiler): void
@@ -97,8 +95,8 @@ final class ComponentNode extends IncludeNode
             ->indent(-1)
             ->write("],");
 
-        if ($this->hasNode('camelCaseVariables')) {
-            $compiler->subcompile($this->getNode('camelCaseVariables'), true);
+        if ($this->hasNode('variables')) {
+            $compiler->subcompile($this->getNode('variables'), true);
         } else {
             $compiler->raw('[]');
         }

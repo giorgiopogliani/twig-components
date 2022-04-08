@@ -40,7 +40,7 @@ class Configuration
      */
     public function setTemplatesPath(string $path): self
     {
-        $this->relativePath = rtrim($path, DIRECTORY_SEPARATOR);
+        $this->templatesPath = rtrim($path, DIRECTORY_SEPARATOR);
 
         return $this;
     }

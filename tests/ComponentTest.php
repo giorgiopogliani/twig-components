@@ -20,7 +20,7 @@ class ComponentTest extends TestCase
         ]);
 
         Configuration::make($twig)
-            ->setTemplatesPath('_components')
+            ->setTemplatesPath('components')
             ->setTemplatesExtension('twig')
             ->useGlobalContext(false)
             ->setup();

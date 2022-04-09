@@ -22,7 +22,8 @@ class ComponentTest extends TestCase
         Configuration::make($twig)
             ->setTemplatesPath('components')
             ->setTemplatesExtension('twig')
-            ->useGlobalContext(false)
+            ->useGlobalContext()
+            ->useCustomTags()
             ->setup();
 
         return $twig;

@@ -131,7 +131,9 @@ class Configuration
     {
         $this->twig->addExtension(new ComponentExtension($this));
 
-        $this->twig->setLexer(new ComponentLexer($this->twig));
+        if ($this->isUsingCustomTags()) {
+            $this->twig->setLexer(new ComponentLexer($this->twig));
+        }
 
         /** @var \Twig\Extension\EscaperExtension */
         $escaper = $this->twig->getExtension(\Twig\Extension\EscaperExtension::class);

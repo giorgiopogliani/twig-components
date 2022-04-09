@@ -21,9 +21,13 @@ This package should work anywhere where Twig is available.
 ```php
 /** @var \Twig\Environment $twig */
 
-use Performing\TwigComponents\Setup;
+use Performing\TwigComponents\Configuration;
 
-Setup::init($twig, '/relative/directory/to/components');
+Configuration::make($twig)
+    ->setTemplatesPath('/relative/directory/to/components')
+    ->setTemplatesExtension('twig')
+    ->useCustomTags()
+    ->setup();
 ```
 
 To enable the package just pass your Twig environment object to the function and specify your components folder relative to your Twig templates folder.
@@ -40,7 +44,10 @@ if (Craft::$app->request->getIsSiteRequest()) {
         Plugins::EVENT_AFTER_LOAD_PLUGINS,
         function (Event $event) {
             $twig = Craft::$app->getView()->getTwig();
-            \Performing\TwigComponents\Setup::init($twig, '/components');
+            \Performing\TwigComponents\Configuration::make($twig)
+                ->setTemplatesPath('/components')
+                ->useCustomTags()
+                ->setup();
         }
     );
 }

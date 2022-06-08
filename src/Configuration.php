@@ -51,14 +51,14 @@ class Configuration
     }
 
     /**
-     * Set tempaltes file extension. (default: twig)
+     * Set templates file extension. (default: twig)
      *
-     * @param string $namespace
+     * @param string $extension
      * @return Configuration
      */
     public function setTemplatesExtension(string $extension): self
     {
-        $this->extension = ltrim('.', $extension);
+        $this->templatesExtension = ltrim($extension, '.');
 
         return $this;
     }

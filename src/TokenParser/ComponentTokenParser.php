@@ -29,7 +29,13 @@ final class ComponentTokenParser extends IncludeTokenParser
             return $name . '.' . $this->configuration->getTemplatesExtension();
         }
 
-        return rtrim($this->configuration->getTemplatesPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name . '.' . $this->configuration->getTemplatesExtension();
+        $componentPath = rtrim($this->configuration->getTemplatesPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name;
+
+        if ($this->configuration->isUsingTemplatesExtension()) {
+            $componentPath .= '.' . $this->configuration->getTemplatesExtension();
+        }
+
+        return  $componentPath;
     }
 
     public function parse(Token $token): Node

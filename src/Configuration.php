@@ -18,6 +18,8 @@ class Configuration
 
     protected string $templatesPath = 'components';
 
+    protected bool $isUsingTemplatesExtension = true;
+
     protected string $templatesExtension = 'twig';
 
     protected ?string $componentsNamespace = null;
@@ -48,6 +50,18 @@ class Configuration
     public function getTemplatesPath(): string
     {
         return $this->templatesPath;
+    }
+
+    public function useTemplatesExtension(bool $isUsing = true): self
+    {
+        $this->isUsingTemplatesExtension = $isUsing;
+
+        return $this;
+    }
+
+    public function isUsingTemplatesExtension(): bool
+    {
+        return $this->isUsingTemplatesExtension;
     }
 
     /**

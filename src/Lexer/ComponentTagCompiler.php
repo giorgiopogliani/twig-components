@@ -46,7 +46,7 @@ class ComponentTagCompiler
                         \s+
                         (?:
                             (?:
-                                \{\{\s*\\\$attributes(?:[^}]+?)?\s*\}\}
+                                \{\{\s*attributes(?:.+?)?\s*\}\}
                             )
                             |
                             (?:
@@ -100,7 +100,7 @@ class ComponentTagCompiler
                         \s+
                         (?:
                             (?:
-                                \{\{\s*\\\$attributes(?:[^}]+?)?\s*\}\}
+                                \{\{\s*attributes(?:.+?)?\s*\}\}
                             )
                             |
                             (?:
@@ -169,7 +169,7 @@ class ComponentTagCompiler
                         \s+
                         (?:
                             (?:
-                                \{\{\s*\\\$attributes(?:[^}]+?)?\s*\}\}
+                                \{\{\s*attributes(?:.+?)?\s*\}\}
                             )
                             |
                             (?:
@@ -288,7 +288,7 @@ class ComponentTagCompiler
     {
         $pattern = "/
             (?:^|\s+)                                        # start of the string or whitespace between attributes
-            \{\{\s*(\\\$attributes(?:[^}]+?(?<!\s))?)\s*\}\} # exact match of attributes variable being echoed
+            \{\{\s*(attributes(?:.+?(?<!\s))?)\s*\}\} # exact match of attributes variable being echoed
         /x";
 
         return preg_replace($pattern, ' :attributes="$1"', $attributeString);

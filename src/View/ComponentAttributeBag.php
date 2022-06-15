@@ -133,6 +133,11 @@ class ComponentAttributeBag implements ArrayAccess, IteratorAggregate
         return new static($attributes);
     }
 
+    public function class($defaultClass = '')
+    {
+        return $this->merge(['class' => $defaultClass]);
+    }
+
     /**
      * Get all of the raw attributes.
      *

@@ -18,6 +18,8 @@ class Configuration
 
     protected string $templatesPath = 'components';
 
+    protected bool $isUsingTemplatesExtension = true;
+
     protected string $templatesExtension = 'twig';
 
     protected ?string $componentsNamespace = null;
@@ -50,15 +52,27 @@ class Configuration
         return $this->templatesPath;
     }
 
+    public function useTemplatesExtension(bool $isUsing = true): self
+    {
+        $this->isUsingTemplatesExtension = $isUsing;
+
+        return $this;
+    }
+
+    public function isUsingTemplatesExtension(): bool
+    {
+        return $this->isUsingTemplatesExtension;
+    }
+
     /**
-     * Set tempaltes file extension. (default: twig)
+     * Set templates file extension. (default: twig)
      *
-     * @param string $namespace
+     * @param string $extension
      * @return Configuration
      */
     public function setTemplatesExtension(string $extension): self
     {
-        $this->extension = ltrim('.', $extension);
+        $this->templatesExtension = ltrim($extension, '.');
 
         return $this;
     }

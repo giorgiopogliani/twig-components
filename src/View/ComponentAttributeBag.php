@@ -24,6 +24,12 @@ class ComponentAttributeBag implements ArrayAccess, IteratorAggregate
     public function __construct(array $attributes = [])
     {
         $this->attributes = $attributes;
+
+        if (array_key_exists('attributes', $this->attributes) && $this->attributes['attributes'] instanceof ComponentAttributeBag) {
+            $parentAttributes = $this->attributes['attributes'];
+            unset($this->attributes['attributes']);
+            $this->attributes = $this->merge($parentAttributes->getAttributes())->getAttributes();
+        }
     }
 
     /**

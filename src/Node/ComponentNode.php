@@ -81,8 +81,13 @@ final class ComponentNode extends IncludeNode
             ->indent(1)
             ->write("\n")
             ->write("array_merge(\n")
-            ->write('$slots,[' . PHP_EOL)
-            ->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")
+            ->write('$slots,' . PHP_EOL);
+
+        if ($this->configuration->isUsingGlobalContext()) {
+            $compiler->write('$context,[');
+        }
+
+        $compiler->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")
             ->write("'attributes' => new " . ComponentAttributeBag::class . "(");
 
         if ($this->hasNode('variables')) {
@@ -98,11 +103,7 @@ final class ComponentNode extends IncludeNode
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);
         } else {
-            $compiler->raw('[]');
-        }
-
-        if ($this->configuration->isUsingGlobalContext()) {
-            $compiler->write(',$context');
+        $compiler->raw('[]');
         }
 
         $compiler->write(")\n");

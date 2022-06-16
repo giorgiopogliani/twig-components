@@ -16,7 +16,7 @@ class ComponentTest extends TestCase
         $loader->addPath(__DIR__ . '/namespace-templates', 'ns');
 
         $twig = new \Twig\Environment($loader, [
-            'cache' => false,//__DIR__ . '/../cache',
+            'cache' => false, //__DIR__ . '/../cache',
         ]);
 
         Configuration::make($twig)
@@ -163,5 +163,27 @@ class ComponentTest extends TestCase
         $html = $template->render();
 
         $this->assertEquals('bar', $html);
+    }
+
+    /** @test */
+    public function test_class_merge_works_with_components_in_components()
+    {
+        $template = $this->twig->createTemplate(<<<HTML
+        <x-button.red class="mb-5">Click me</x-button.red>
+        HTML);
+        $html = $template->render();
+
+        $this->assertEquals('<button class="mb-5 bg-red-500 text-white">Click me</button>', $html);
+    }
+
+    /** @test */
+    public function test_attributes_dont_conflict_with_components_in_components()
+    {
+        $template = $this->twig->createTemplate(<<<HTML
+        <x-button.blue class="mb-5">Click me</x-button.blue>
+        HTML);
+        $html = $template->render();
+
+        $this->assertEquals('<div class="mb-5 bg-red-500"><button class="text-white">Click me</button></div>', $html);
     }
 }

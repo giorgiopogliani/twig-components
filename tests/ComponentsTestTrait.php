@@ -2,38 +2,8 @@
 
 namespace Performing\TwigComponents\Tests;
 
-use Performing\TwigComponents\Configuration;
-use PHPUnit\Framework\TestCase;
-
-class ComponentTest extends TestCase
+Trait ComponentsTestTrait
 {
-    protected $twig;
-
-    protected function setupTwig(): \Twig\Environment
-    {
-        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
-
-        $loader->addPath(__DIR__ . '/namespace-templates', 'ns');
-
-        $twig = new \Twig\Environment($loader, [
-            'cache' => false, //__DIR__ . '/../cache',
-        ]);
-
-        Configuration::make($twig)
-            ->setTemplatesPath('components')
-            ->setTemplatesExtension('twig')
-            ->useGlobalContext()
-            ->useCustomTags()
-            ->setup();
-
-        return $twig;
-    }
-
-    public function setUp(): void
-    {
-        $this->twig = $this->setupTwig();
-    }
-
     /** @test */
     public function render_simple_component()
     {
@@ -151,18 +121,6 @@ class ComponentTest extends TestCase
         <button class="bg-blue-600 ns-button text-white"> test2 </button>
         <button class="'bg-blue-600' ns-button text-white"> test3 </button>
         HTML, $html);
-    }
-
-    /** @test */
-    public function share_global_context_inside_components()
-    {
-        $template = $this->twig->createTemplate(<<<HTML
-        {% set foo = 'bar' %}
-        <x-global_context></x-global_context>
-        HTML);
-        $html = $template->render();
-
-        $this->assertEquals('bar', $html);
     }
 
     /** @test */

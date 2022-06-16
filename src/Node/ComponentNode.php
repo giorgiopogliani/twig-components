@@ -85,6 +85,8 @@ final class ComponentNode extends IncludeNode
 
         if ($this->configuration->isUsingGlobalContext()) {
             $compiler->write('$context,[');
+        } else {
+            $compiler->write('[');
         }
 
         $compiler->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")

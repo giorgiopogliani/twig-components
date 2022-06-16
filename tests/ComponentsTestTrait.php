@@ -2,7 +2,7 @@
 
 namespace Performing\TwigComponents\Tests;
 
-Trait ComponentsTestTrait
+trait ComponentsTestTrait
 {
     /** @test */
     public function render_simple_component()

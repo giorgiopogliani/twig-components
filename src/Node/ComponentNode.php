@@ -103,7 +103,7 @@ final class ComponentNode extends IncludeNode
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);
         } else {
-        $compiler->raw('[]');
+            $compiler->raw('[]');
         }
 
         $compiler->write(")\n");

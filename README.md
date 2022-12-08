@@ -55,6 +55,48 @@ if (Craft::$app->request->getIsSiteRequest()) {
 
 > The `if` statement ensure you don't get `'Unable to register extension "..." as extensions have already been initialized'` as error.
 
+### Symfony
+
+In Symfony you can do something like this.
+
+```yml
+# services.yml
+
+services:
+    My\Namespace\TwigEnvironmentConfigurator:
+        decorates: 'twig.configurator.environment'
+        arguments: [ '@My\Namespace\TwigEnvironmentConfigurator.inner' ]
+```
+```php
+
+// TwigEnvironmentConfigurator.php
+
+use Symfony\Bundle\TwigBundle\DependencyInjection\Configurator\EnvironmentConfigurator;
+use Twig\Environment;
+use Performing\TwigComponents\Configuration;
+
+final class TwigEnvironmentConfigurator
+{
+    public function __construct(
+        private EnvironmentConfigurator $decorated
+    ) {}
+
+    public function configure(Environment $environment) : void
+    {
+        $this->decorated->configure($environment);
+
+        // Relative path to your components folder
+        $relativePath = '_components'; 
+
+        Configuration::make($environment)
+            ->setTemplatesPath($relativePath)
+            ->setTemplatesExtension('twig')
+            ->useCustomTags()
+            ->setup();
+    }
+}
+```
+
 ## Usage
 
 The components are just Twig templates in a folder of your choice (e.g. `components`) and can be used anywhere in your Twig templates. The slot variable is any content you will add between the opening and the close tag.

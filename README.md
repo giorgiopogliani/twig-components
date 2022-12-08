@@ -3,6 +3,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/performing/twig-components)
 [![GitHub Tests Action Status](https://img.shields.io/github/workflow/status/giorgiopogliani/twig-components/Tests)](https://github.com/giorgiopogliani/twig-components/actions?query=workflow%3ATests+branch%3Amaster)
 [![Total Downloads](https://img.shields.io/packagist/dt/performing/twig-components.svg?style=flat-square)](https://packagist.org/packages/performing/twig-components)
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgiorgiopogliani%2Ftwig-components.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgiorgiopogliani%2Ftwig-components?ref=badge_shield)
 
 This is a PHP package for automatically create Twig components as tags. This is highly inspired from Laravel Blade Components.  
 
@@ -250,3 +251,6 @@ composer test
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fgiorgiopogliani%2Ftwig-components.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fgiorgiopogliani%2Ftwig-components?ref=badge_large)

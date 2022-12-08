@@ -32,7 +32,7 @@ Configuration::make($twig)
 
 To enable the package just pass your Twig environment object to the function and specify your components folder relative to your Twig templates folder.
 
-### Craft CMS example
+### Craft CMS
 
 In Craft CMS you should do something like this.
 

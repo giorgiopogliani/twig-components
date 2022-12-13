@@ -3,12 +3,14 @@
 namespace Performing\TwigComponents\Node;
 
 use Performing\TwigComponents\Configuration;
+use Performing\TwigComponents\View\Component;
 use Performing\TwigComponents\View\ComponentAttributeBag;
 use Performing\TwigComponents\View\ComponentSlot;
+use ReflectionClass;
+use ReflectionProperty;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
-
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 
@@ -16,12 +18,15 @@ final class ComponentNode extends IncludeNode
 {
     private Configuration $configuration;
 
-    public function __construct(string $path, Node $slot, ?AbstractExpression $variables, int $lineno, Configuration $configuration)
+    private Component $component;
+
+    public function __construct(Component $component, Node $slot, ?AbstractExpression $variables, int $lineno, Configuration $configuration)
     {
         parent::__construct(new ConstantExpression('not_used', $lineno), $variables, false, false, $lineno, null);
 
         $this->configuration = $configuration;
-        $this->setAttribute('path', $path);
+        $this->component = $component;
+        $this->setAttribute('path', $component->template());
         $this->setNode('slot', $slot);
     }
 
@@ -87,6 +92,13 @@ final class ComponentNode extends IncludeNode
             $compiler->write('$context,[');
         } else {
             $compiler->write('[');
+        }
+
+        foreach ((new ReflectionClass($this->component))->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
+            $compiler
+                ->write("'{$property->getName()}' => ")
+                ->repr($property->getValue($this->component))
+                ->write(",\n");
         }
 
         $compiler->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")

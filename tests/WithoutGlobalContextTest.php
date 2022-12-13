@@ -24,6 +24,7 @@ class WithoutGlobalContextTest extends TestCase
         Configuration::make($twig)
             ->setTemplatesPath('components')
             ->setTemplatesExtension('twig')
+            ->setComponentsNamespace('\Performing\TwigComponents\Tests\View')
             ->useCustomTags()
             ->setup();
 

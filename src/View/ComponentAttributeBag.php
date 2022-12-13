@@ -191,6 +191,7 @@ class ComponentAttributeBag implements ArrayAccess, IteratorAggregate
      * @param string $offset
      * @return mixed
      */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return $this->get($offset);

@@ -24,6 +24,7 @@ class GlobalContextTest extends TestCase
         Configuration::make($twig)
             ->setTemplatesPath('components')
             ->setTemplatesExtension('twig')
+            ->setComponentsNamespace('\Performing\TwigComponents\Tests\View')
             ->useGlobalContext()
             ->useCustomTags()
             ->setup();

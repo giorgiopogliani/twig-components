@@ -90,7 +90,7 @@ class Configuration
      */
     public function setComponentsNamespace(string $namespace): self
     {
-        $this->namespace = $namespace;
+        $this->componentsNamespace = $namespace;
 
         return $this;
     }

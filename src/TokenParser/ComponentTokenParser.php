@@ -5,6 +5,8 @@ namespace Performing\TwigComponents\TokenParser;
 use Exception;
 use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\Node\ComponentNode;
+use Performing\TwigComponents\View\AnonymousComponent;
+use Performing\TwigComponents\View\Component;
 use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\IncludeTokenParser;
@@ -23,19 +25,16 @@ final class ComponentTokenParser extends IncludeTokenParser
         $this->configuration = $configuration;
     }
 
-    public function getComponentPath(string $name)
+    public function getComponent(string $name): Component
     {
-        if (strpos($name, '@') === 0) {
-            return $name . '.' . $this->configuration->getTemplatesExtension();
+        if ($namespace = $this->configuration->getComponentsNamespace()) {
+            $guessComponentClass = $namespace . '\\' . ucwords(mb_strtolower($name));
+            if (class_exists($guessComponentClass) && is_subclass_of($guessComponentClass, Component::class)) {
+                return new $guessComponentClass();
+            }
         }
 
-        $componentPath = rtrim($this->configuration->getTemplatesPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name;
-
-        if ($this->configuration->isUsingTemplatesExtension()) {
-            $componentPath .= '.' . $this->configuration->getTemplatesExtension();
-        }
-
-        return  $componentPath;
+        return new AnonymousComponent($name, $this->configuration);
     }
 
     public function parse(Token $token): Node
@@ -46,7 +45,7 @@ final class ComponentTokenParser extends IncludeTokenParser
 
         $this->parser->getStream()->expect(Token::BLOCK_END_TYPE);
 
-        return new ComponentNode($this->getComponentPath($name), $slot, $variables, $token->getLine(), $this->configuration);
+        return new ComponentNode($this->getComponent($name), $slot, $variables, $token->getLine(), $this->configuration);
     }
 
     protected function parseArguments()

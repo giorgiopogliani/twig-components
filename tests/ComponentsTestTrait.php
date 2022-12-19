@@ -149,10 +149,10 @@ trait ComponentsTestTrait
     public function test_class_components()
     {
         $template = $this->twig->createTemplate(<<<HTML
-        <x-alert message="this is a message">Click me</x-alert>
+        <x-alert message="this is a message"></x-alert>
         HTML);
         $html = $template->render();
 
-        $this->assertEquals('<div>text-indigo-50 bg-indigo-400this is a message</div>', $html);
+        $this->assertEquals('<div>text-indigo-50 bg-indigo-400this is a messagetest12</div>', $html);
     }
 }

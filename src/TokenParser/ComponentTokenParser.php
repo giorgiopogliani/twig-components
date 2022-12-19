@@ -27,14 +27,19 @@ final class ComponentTokenParser extends IncludeTokenParser
 
     public function getComponent(string $name): Component
     {
+        $componentClass = AnonymousComponent::class;
+
         if ($namespace = $this->configuration->getComponentsNamespace()) {
             $guessComponentClass = $namespace . '\\' . ucwords(mb_strtolower($name));
+
             if (class_exists($guessComponentClass) && is_subclass_of($guessComponentClass, Component::class)) {
-                return new $guessComponentClass();
+                $componentClass = $guessComponentClass;
             }
         }
 
-        return new AnonymousComponent($name, $this->configuration);
+        return $componentClass::make()
+            ->withName($name)
+            ->withConfiguration($this->configuration);
     }
 
     public function parse(Token $token): Node

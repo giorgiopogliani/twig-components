@@ -82,6 +82,6 @@ class ComponentSlot
      */
     public function __toString()
     {
-        return $this->toHtml();
+        return twig_raw_filter($this->toHtml());
     }
 }

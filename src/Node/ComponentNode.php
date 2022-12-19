@@ -4,10 +4,6 @@ namespace Performing\TwigComponents\Node;
 
 use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\View\Component;
-use Performing\TwigComponents\View\ComponentAttributeBag;
-use Performing\TwigComponents\View\ComponentSlot;
-use ReflectionClass;
-use ReflectionProperty;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
@@ -26,6 +22,7 @@ final class ComponentNode extends IncludeNode
 
         $this->configuration = $configuration;
         $this->component = $component;
+        $this->setAttribute('component', get_class($component));
         $this->setAttribute('path', $component->template());
         $this->setNode('slot', $slot);
     }
@@ -82,44 +79,26 @@ final class ComponentNode extends IncludeNode
 
     protected function addTemplateArguments(Compiler $compiler)
     {
-        $compiler
-            ->indent(1)
-            ->write("\n")
-            ->write("array_merge(\n")
-            ->write('$slots,' . PHP_EOL);
+        $compiler->write($this->getAttribute('component') . "::make(" . PHP_EOL);
+        if ($this->hasNode('variables')) {
+            $compiler->subcompile($this->getNode('variables'), true);
+        } else {
+            $compiler->raw('[]');
+        }
+        $compiler->write(PHP_EOL . ')->getContext($slots, $slot,');
 
         if ($this->configuration->isUsingGlobalContext()) {
-            $compiler->write('$context,[');
+            $compiler->write('$context,');
         } else {
-            $compiler->write('[');
+            $compiler->write('[],');
         }
-
-        foreach ((new ReflectionClass($this->component))->getProperties(ReflectionProperty::IS_PUBLIC) as $property) {
-            $compiler
-                ->write("'{$property->getName()}' => ")
-                ->repr($property->getValue($this->component))
-                ->write(",\n");
-        }
-
-        $compiler->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")
-            ->write("'attributes' => new " . ComponentAttributeBag::class . "(");
 
         if ($this->hasNode('variables')) {
-            $compiler->subcompile($this->getNode('variables'), true);
+                $compiler->subcompile($this->getNode('variables'), true);
         } else {
             $compiler->raw('[]');
         }
 
-        $compiler->write(")\n")
-            ->indent(-1)
-            ->write("],");
-
-        if ($this->hasNode('variables')) {
-            $compiler->subcompile($this->getNode('variables'), true);
-        } else {
-            $compiler->raw('[]');
-        }
-
-        $compiler->write(")\n");
+        $compiler->write(')');
     }
 }

@@ -6,14 +6,11 @@ use Performing\TwigComponents\Configuration;
 
 class AnonymousComponent extends Component
 {
-    private string $name;
+    private array $attributes;
 
-    private Configuration $configuration;
-
-    public function __construct(string $name, Configuration $configuration)
+    public function __construct($attributes = [])
     {
-        $this->name = $name;
-        $this->configuration = $configuration;
+        $this->attributes = $attributes;
     }
 
     public function template(): string

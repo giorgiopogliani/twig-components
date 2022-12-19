@@ -32,6 +32,8 @@ class Alert extends Component
         'warning' => 'text-red-50 bg-red-400',
     ];
 
+    protected $counter = 0;
+
     /**
      * Create the component instance.
      *
@@ -42,6 +44,18 @@ class Alert extends Component
     public function __construct($type = 'default', $message = null)
     {
         $this->type = $this->types[$type] ?? $this->types['default'];
+        $this->message = $message;
+    }
+
+    public function counter()
+    {
+        $this->counter++;
+
+        return $this->counter;
+    }
+
+    public function setMessage($message)
+    {
         $this->message = $message;
     }
 

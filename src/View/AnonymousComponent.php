@@ -2,8 +2,6 @@
 
 namespace Performing\TwigComponents\View;
 
-use Performing\TwigComponents\Configuration;
-
 class AnonymousComponent extends Component
 {
     private array $attributes;

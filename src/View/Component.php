@@ -77,7 +77,7 @@ abstract class Component
         $context['this'] = $this;
 
         foreach ((new ReflectionClass($this))->getProperties(\ReflectionProperty::IS_PUBLIC) as $property) {
-            $context[$property->getName()] = new VariableWrapper($this, $property->getName());
+            $context[$property->getName()] = &$this->{$property->getName()};
         }
 
         $context['attributes'] = new ComponentAttributeBag($variables);

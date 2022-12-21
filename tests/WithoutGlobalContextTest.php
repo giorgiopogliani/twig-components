@@ -25,6 +25,7 @@ class WithoutGlobalContextTest extends TestCase
             ->setTemplatesPath('components')
             ->setTemplatesExtension('twig')
             ->setComponentsNamespace('\Performing\TwigComponents\Tests\View')
+            ->register('test', \Performing\TwigComponents\Tests\View\Alert::class)
             ->useCustomTags()
             ->setup();
 

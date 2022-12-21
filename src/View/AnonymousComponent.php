@@ -17,7 +17,9 @@ class AnonymousComponent extends Component
             return $this->name . '.' . $this->configuration->getTemplatesExtension();
         }
 
-        $componentPath = rtrim($this->configuration->getTemplatesPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $this->name;
+        $componentPath = rtrim($this->configuration->getTemplatesPath(), DIRECTORY_SEPARATOR)
+            . DIRECTORY_SEPARATOR
+            . $this->name;
 
         if ($this->configuration->isUsingTemplatesExtension()) {
             $componentPath .= '.' . $this->configuration->getTemplatesExtension();

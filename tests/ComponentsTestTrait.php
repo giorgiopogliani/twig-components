@@ -150,9 +150,10 @@ trait ComponentsTestTrait
     {
         $template = $this->twig->createTemplate(<<<HTML
         <x-alert message="this is a message"></x-alert>
+        <x-test counter="200" message="this is a message"></x-test>
         HTML);
         $html = $template->render();
 
-        $this->assertEquals('<div>text-indigo-50 bg-indigo-400this is a messagetest12</div>', $html);
+        $this->assertEquals('<div>text-indigo-50 bg-indigo-400this is a messagetest12</div><div>text-indigo-50 bg-indigo-400this is a messagetest12</div>', $html);
     }
 }

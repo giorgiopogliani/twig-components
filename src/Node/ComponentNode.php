@@ -3,12 +3,10 @@
 namespace Performing\TwigComponents\Node;
 
 use Performing\TwigComponents\Configuration;
-use Performing\TwigComponents\View\ComponentAttributeBag;
-use Performing\TwigComponents\View\ComponentSlot;
+use Performing\TwigComponents\View\Component;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
-
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 
@@ -16,12 +14,16 @@ final class ComponentNode extends IncludeNode
 {
     private Configuration $configuration;
 
-    public function __construct(string $path, Node $slot, ?AbstractExpression $variables, int $lineno, Configuration $configuration)
+    private Component $component;
+
+    public function __construct(Component $component, Node $slot, ?AbstractExpression $variables, int $lineno, Configuration $configuration)
     {
         parent::__construct(new ConstantExpression('not_used', $lineno), $variables, false, false, $lineno, null);
 
         $this->configuration = $configuration;
-        $this->setAttribute('path', $path);
+        $this->component = $component;
+        $this->setAttribute('component', get_class($component));
+        $this->setAttribute('path', $component->template());
         $this->setNode('slot', $slot);
     }
 
@@ -77,20 +79,19 @@ final class ComponentNode extends IncludeNode
 
     protected function addTemplateArguments(Compiler $compiler)
     {
-        $compiler
-            ->indent(1)
-            ->write("\n")
-            ->write("array_merge(\n")
-            ->write('$slots,' . PHP_EOL);
+        $compiler->write($this->getAttribute('component') . "::make(" . PHP_EOL);
+        if ($this->hasNode('variables')) {
+            $compiler->subcompile($this->getNode('variables'), true);
+        } else {
+            $compiler->raw('[]');
+        }
+        $compiler->write(PHP_EOL . ')->getContext($slots, $slot,');
 
         if ($this->configuration->isUsingGlobalContext()) {
-            $compiler->write('$context,[');
+            $compiler->write('$context,');
         } else {
-            $compiler->write('[');
+            $compiler->write('[],');
         }
-
-        $compiler->write("'slot' => new  " . ComponentSlot::class . " (\$slot),\n")
-            ->write("'attributes' => new " . ComponentAttributeBag::class . "(");
 
         if ($this->hasNode('variables')) {
             $compiler->subcompile($this->getNode('variables'), true);
@@ -98,16 +99,6 @@ final class ComponentNode extends IncludeNode
             $compiler->raw('[]');
         }
 
-        $compiler->write(")\n")
-            ->indent(-1)
-            ->write("],");
-
-        if ($this->hasNode('variables')) {
-            $compiler->subcompile($this->getNode('variables'), true);
-        } else {
-            $compiler->raw('[]');
-        }
-
-        $compiler->write(")\n");
+        $compiler->write(')');
     }
 }

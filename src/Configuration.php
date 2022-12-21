@@ -24,6 +24,8 @@ class Configuration
 
     protected ?string $componentsNamespace = null;
 
+    protected array $registeredComponents = [];
+
     public function __construct(Environment $twig)
     {
         $this->twig = $twig;
@@ -90,7 +92,7 @@ class Configuration
      */
     public function setComponentsNamespace(string $namespace): self
     {
-        $this->namespace = $namespace;
+        $this->componentsNamespace = $namespace;
 
         return $this;
     }
@@ -134,6 +136,26 @@ class Configuration
     public function isUsingCustomTags(): bool
     {
         return $this->isUsingCustomTags;
+    }
+
+    /**
+     * Manually register a component name with its class.
+     */
+    public function register(string $name, string $class): self
+    {
+        $this->registeredComponents[$name] = $class;
+
+        return $this;
+    }
+
+    public function hasRegisteredComponent(string $name): bool
+    {
+        return array_key_exists($name, $this->registeredComponents);
+    }
+
+    public function getRegisteredComponent(string $name): string
+    {
+        return $this->registeredComponents[$name];
     }
 
     /**

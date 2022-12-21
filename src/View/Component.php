@@ -62,7 +62,7 @@ abstract class Component
             return new static($data);
         }
 
-        return new static(...array_merge($parameters, $data));
+        return new static(...array_intersect_key(array_merge($parameters, $data), $parameters));
     }
 
     public function getContext($slots, $slot, $globalContext, $variables)

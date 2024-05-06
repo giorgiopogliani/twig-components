@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "twig/twig": "^2.12.5 || ^3.0.0"
+        "twig/twig": "^2.12.5 || >=3.0 <3.9"
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "^3.0",

@@ -5,6 +5,7 @@ namespace Performing\TwigComponents\Node;
 use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\View\ComponentAttributeBag;
 use Performing\TwigComponents\View\ComponentSlot;
+use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
@@ -12,6 +13,7 @@ use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;
 
+#[YieldReady]
 final class ComponentNode extends IncludeNode
 {
     private Configuration $configuration;
@@ -40,16 +42,17 @@ final class ComponentNode extends IncludeNode
             ->write('$slotsStack = $slotsStack ?? [];' . PHP_EOL)
             ->write('$slotsStack[] = $slots ?? [];' . PHP_EOL)
             ->write('$slots = [];' . PHP_EOL)
-            ->write("ob_start();"  . PHP_EOL)
+            ->write('$slot =  implode("", iterator_to_array((function () use (&$slots, &$context) {'  . PHP_EOL)
             ->subcompile($this->getNode('slot'))
-            ->write('$slot = ob_get_clean();' . PHP_EOL)
-            ->write(sprintf('$%s->display(', $template));
+            ->write("})() ?? new \EmptyIterator()));"  . PHP_EOL)
+            ->write(sprintf('yield from $%s->unwrap()->yield(', $template));
 
         $this->addTemplateArguments($compiler);
 
         $compiler
             ->raw(");\n")
             ->write('$slots = array_pop($slotsStack);' . PHP_EOL)
+            ->write("yield '';")
             ->write("}\n");
     }
 

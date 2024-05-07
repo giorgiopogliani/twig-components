@@ -45,7 +45,7 @@ final class ComponentNode extends IncludeNode
             ->write('$slot =  implode("", iterator_to_array((function () use (&$slots, &$context) {'  . PHP_EOL)
             ->subcompile($this->getNode('slot'))
             ->write("})() ?? new \EmptyIterator()));"  . PHP_EOL)
-            ->write(sprintf('yield from $%s->unwrap()->yield(', $template));
+            ->write(sprintf('yield $%s->render(', $template));
 
         $this->addTemplateArguments($compiler);
 

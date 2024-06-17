@@ -55,14 +55,16 @@ final class ComponentNode extends IncludeNode
 
     protected function addGetTemplate(Compiler $compiler)
     {
+        $repr = $this->isDynamicComponent() ? 'raw' : 'repr';
+
         $compiler
             ->raw('$this->loadTemplate(' . PHP_EOL)
             ->indent(1)
             ->write('')
-            ->repr($this->getTemplateName())
+            ->$repr($this->getTemplateName())
             ->raw(', ' . PHP_EOL)
             ->write('')
-            ->repr($this->getTemplateName())
+            ->$repr($this->getTemplateName())
             ->raw(', ' . PHP_EOL)
             ->write('')
             ->repr($this->getTemplateLine())
@@ -70,9 +72,23 @@ final class ComponentNode extends IncludeNode
             ->raw(PHP_EOL . ');' . PHP_EOL . PHP_EOL);
     }
 
+    public function isDynamicComponent()
+    {
+        return strpos($this->getAttribute('path'), 'dynamic-component') !== false;
+    }
+
     public function getTemplateName(): ?string
     {
-        return $this->getAttribute('path');
+        if (!$this->isDynamicComponent()) {
+            return $this->getAttribute('path');
+        }
+
+        $path = $this->getAttribute('path');
+        preg_match('/.*(dynamic-component\[(.*)\]).*/', $path, $matches, PREG_OFFSET_CAPTURE, 0);
+        $path = str_replace($matches[1][0], '\' . ($context[\'' . $matches[2][0] . '\'] ?? null) . \'', $path);
+        $path = "'$path'";
+
+        return $path;
     }
 
     protected function addTemplateArguments(Compiler $compiler)

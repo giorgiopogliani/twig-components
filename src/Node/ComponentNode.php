@@ -2,6 +2,7 @@
 
 namespace Performing\TwigComponents\Node;
 
+use Exception;
 use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\View\ComponentAttributeBag;
 use Performing\TwigComponents\View\ComponentSlot;

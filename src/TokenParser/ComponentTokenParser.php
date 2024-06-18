@@ -5,7 +5,6 @@ namespace Performing\TwigComponents\TokenParser;
 use Exception;
 use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\Node\ComponentNode;
-use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Node;
 use Twig\Token;
 use Twig\TokenParser\IncludeTokenParser;

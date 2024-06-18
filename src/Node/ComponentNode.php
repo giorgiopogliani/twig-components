@@ -77,18 +77,40 @@ final class ComponentNode extends IncludeNode
         return strpos($this->getAttribute('path'), 'dynamic-component') !== false;
     }
 
-    public function getTemplateName(): ?string
+    public function getDynamicComponent()
     {
-        if (!$this->isDynamicComponent()) {
-            return $this->getAttribute('path');
+        foreach ($this->getNode('variables')->getKeyValuePairs() as $pair) {
+            /** @var \Twig\Node\Expression\AbstractExpression $key */
+            $key = $pair['key'];
+            /** @var \Twig\Node\Expression\AbstractExpression $value */
+            $value = $pair['value'];
+
+            if ($key->getAttribute('value') !== 'component') {
+                continue;
+            }
+
+            if ($value->hasAttribute('value')) {
+                // Returns the component string value
+                return $value->getAttribute('value');
+            }
+
+            if ($value->hasAttribute('name')) {
+                // Uses the context to get the component value
+                return '\' . ($context[\'' . $value->getAttribute('name') . '\'] ?? null) . \'';
+            }
         }
 
-        $path = $this->getAttribute('path');
-        preg_match('/.*(dynamic-component\[(.*)\]).*/', $path, $matches, PREG_OFFSET_CAPTURE, 0);
-        $path = str_replace($matches[1][0], '\' . ($context[\'' . $matches[2][0] . '\'] ?? null) . \'', $path);
-        $path = "'$path'";
+        throw new Exception('Dynamic component must have a component attribute');
+    }
 
-        return $path;
+    public function getTemplateName(): ?string
+    {
+        if ($this->isDynamicComponent()) {
+            $path = str_replace('dynamic-component', $this->getDynamicComponent(), $this->getAttribute('path'));
+            return "'$path'";
+        }
+
+        return $this->getAttribute('path');
     }
 
     protected function addTemplateArguments(Compiler $compiler)

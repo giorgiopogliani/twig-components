@@ -67,10 +67,6 @@ final class ComponentTokenParser extends IncludeTokenParser
 
         $stream->expect(/* Token::BLOCK_END_TYPE */3);
 
-        if ($name === 'dynamic-component') {
-            $name = $this->parseDynamicComponent($variables) ?: $name;
-        }
-
         return [$variables, $name];
     }
 
@@ -124,29 +120,5 @@ final class ComponentTokenParser extends IncludeTokenParser
     public function getTag(): string
     {
         return 'x';
-    }
-
-    public function parseDynamicComponent(ArrayExpression $variables)
-    {
-        foreach ($variables->getKeyValuePairs() as $pair) {
-            /** @var \Twig\Node\Expression\AbstractExpression $key */
-            $key = $pair['key'];
-            /** @var \Twig\Node\Expression\AbstractExpression $value */
-            $value = $pair['value'];
-
-            if ($key->getAttribute('value') !== 'component') {
-                continue;
-            }
-
-            if ($value->hasAttribute('value')) {
-                return $value->getAttribute('value');
-            }
-
-            if ($value->hasAttribute('name')) {
-                return 'dynamic-component[' . $value->getAttribute('name') . ']';
-            }
-        }
-
-        return null;
     }
 }

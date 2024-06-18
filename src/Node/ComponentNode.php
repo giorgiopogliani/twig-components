@@ -80,11 +80,11 @@ final class ComponentNode extends IncludeNode
 
     public function getDynamicComponent()
     {
-        foreach ($this->getNode('variables')->getKeyValuePairs() as $pair) {
+        foreach (array_chunk($this->getNode('variables')->nodes, 2) as $pair) {
             /** @var \Twig\Node\Expression\AbstractExpression $key */
-            $key = $pair['key'];
+            $key = $pair[0];
             /** @var \Twig\Node\Expression\AbstractExpression $value */
-            $value = $pair['value'];
+            $value = $pair[1];
 
             if ($key->getAttribute('value') !== 'component') {
                 continue;
@@ -116,6 +116,8 @@ final class ComponentNode extends IncludeNode
 
     protected function addTemplateArguments(Compiler $compiler)
     {
+        $this->filterVariables();
+
         $compiler
             ->indent(1)
             ->write("\n")
@@ -148,5 +150,24 @@ final class ComponentNode extends IncludeNode
         }
 
         $compiler->write(")\n");
+    }
+
+    public function filterVariables()
+    {
+        if (!$this->isDynamicComponent()) {
+            return;
+        }
+
+        $variables = $this->getNode('variables');
+
+        foreach (array_chunk($variables->nodes, 2, true) as $pair) {
+            /** @var \Twig\Node\Expression\AbstractExpression $key */
+            $key = array_values($pair)[0];
+
+            if ($key->getAttribute('value') === 'component') {
+                $variables->removeNode(array_keys($pair)[0]);
+                $variables->removeNode(array_keys($pair)[1]);
+            }
+        }
     }
 }

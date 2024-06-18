@@ -1,0 +1,6 @@
+<x-dynamic-component :component="'simple-button.primary'" class="{{'text' ~ '-white' }}"> test1 </x-dynamic-component>
+
+{% set componentName = 'simple-button.primary' %}
+<x-dynamic-component :component="componentName" :class="'text-white'"> test2 </x-dynamic-component>
+
+<x-dynamic-component :component="componentName" class="'text-white'"> test3 </x-dynamic-component>

@@ -80,6 +80,8 @@ final class ComponentNode extends IncludeNode
 
     public function getDynamicComponent()
     {
+        $component = null;
+
         foreach (array_chunk($this->getNode('variables')->nodes, 2) as $pair) {
             /** @var \Twig\Node\Expression\AbstractExpression $key */
             $key = $pair[0];
@@ -92,23 +94,35 @@ final class ComponentNode extends IncludeNode
 
             if ($value->hasAttribute('value')) {
                 // Returns the component string value
-                return '\' . str_replace(\'.\', DIRECTORY_SEPARATOR, \'' . $value->getAttribute('value') . '\') . \'';
+                $component = '\'' . $value->getAttribute('value') . '\'';
+                break;
             }
 
             if ($value->hasAttribute('name')) {
                 // Uses the context to get the component value
-                return '\' . str_replace(\'.\', DIRECTORY_SEPARATOR, ($context[\'' . $value->getAttribute('name') . '\'] ?? \'\')) . \'';
+                $component = '($context[\'' . $value->getAttribute('name') . '\'] ?? null)';
+                break;
             }
         }
 
-        throw new Exception('Dynamic component must have a component attribute');
+        if (!$component) {
+            throw new Exception('Dynamic component must have a component attribute');
+        }
+
+        // TODO: Convert namespace to @ notation
+
+        // Converts dot notation to directory separator
+        $component = 'str_replace(\'.\', DIRECTORY_SEPARATOR, ' . $component . ')';
+
+        $path = str_replace('dynamic-component', '\' . ' . $component . ' . \'', $this->getAttribute('path'));
+
+        return "'$path'";
     }
 
     public function getTemplateName(): ?string
     {
         if ($this->isDynamicComponent()) {
-            $path = str_replace('dynamic-component', $this->getDynamicComponent(), $this->getAttribute('path'));
-            return "'$path'";
+            return $this->getDynamicComponent();
         }
 
         return $this->getAttribute('path');

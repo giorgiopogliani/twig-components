@@ -167,4 +167,26 @@ trait ComponentsTestTrait
         <button class="'text-white' bg-blue-800 rounded"> test3 </button>
         HTML, $html);
     }
+
+    /** @test */
+    public function render_namespaced_dynamic_component()
+    {
+        $html = $this->twig->render('test_namespaced_dynamic_component.twig');
+
+        $this->assertEquals(<<<HTML
+        <button class="bg-blue-600 ns-button text-white"> test </button>
+        HTML, $html);
+    }
+
+    /** @test */
+    public function render_namespaced_xtags_dynamic_component()
+    {
+        $html = $this->twig->render('test_namespaced_xtags_dynamic_component.twig');
+
+        $this->assertEquals(<<<HTML
+        <button class="bg-blue-600 ns-button text-white"> test1 </button>
+        <button class="bg-blue-600 ns-button text-white"> test2 </button>
+        <button class="'bg-blue-600' ns-button text-white"> test3 </button>
+        HTML, $html);
+    }
 }

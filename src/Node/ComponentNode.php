@@ -92,12 +92,12 @@ final class ComponentNode extends IncludeNode
 
             if ($value->hasAttribute('value')) {
                 // Returns the component string value
-                return $value->getAttribute('value');
+                return '\' . str_replace(\'.\', DIRECTORY_SEPARATOR, \'' . $value->getAttribute('value') . '\') . \'';
             }
 
             if ($value->hasAttribute('name')) {
                 // Uses the context to get the component value
-                return '\' . ($context[\'' . $value->getAttribute('name') . '\'] ?? null) . \'';
+                return '\' . str_replace(\'.\', DIRECTORY_SEPARATOR, ($context[\'' . $value->getAttribute('name') . '\'] ?? \'\')) . \'';
             }
         }
 

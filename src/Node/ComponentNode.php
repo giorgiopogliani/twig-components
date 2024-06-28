@@ -15,6 +15,8 @@ use Twig\Node\Node;
 
 final class ComponentNode extends IncludeNode
 {
+    const DYNAMIC_COMPONENT_NAME = 'dynamic-component';
+
     private Configuration $configuration;
 
     public function __construct(string $path, Node $slot, ?AbstractExpression $variables, int $lineno, Configuration $configuration)
@@ -75,7 +77,7 @@ final class ComponentNode extends IncludeNode
 
     public function isDynamicComponent()
     {
-        return strpos($this->getAttribute('path'), 'dynamic-component') !== false;
+        return strpos($this->getAttribute('path'), self::DYNAMIC_COMPONENT_NAME) !== false;
     }
 
     public function getDynamicComponent()
@@ -109,14 +111,24 @@ final class ComponentNode extends IncludeNode
             throw new Exception('Dynamic component must have a component attribute');
         }
 
-        // TODO: Convert namespace to @ notation
+        $isNamespaced = strpos($component, ':') !== false;
+
+        // Convert namespace to @ notation
+        if ($isNamespaced) {
+            $component = preg_replace('/([a-z\.-]*):([^\']*)/i', '@$1/$2', $component);
+        }
 
         // Converts dot notation to directory separator
         $component = 'str_replace(\'.\', DIRECTORY_SEPARATOR, ' . $component . ')';
 
-        $path = str_replace('dynamic-component', '\' . ' . $component . ' . \'', $this->getAttribute('path'));
-
-        return "'$path'";
+        if ($isNamespaced) {
+            $dynamicComponentEndPosition = strpos($this->getAttribute('path'), self::DYNAMIC_COMPONENT_NAME) + strlen(self::DYNAMIC_COMPONENT_NAME);
+            $pathEnd = substr($this->getAttribute('path'), $dynamicComponentEndPosition);
+            return $component . ' . \'' . $pathEnd . '\'';
+        } else {
+            $path = str_replace(self::DYNAMIC_COMPONENT_NAME, '\' . ' . $component . ' . \'', $this->getAttribute('path'));
+            return "'$path'";
+        }
     }
 
     public function getTemplateName(): ?string

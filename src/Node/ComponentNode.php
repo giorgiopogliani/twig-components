@@ -111,6 +111,11 @@ final class ComponentNode extends IncludeNode
             throw new Exception('Dynamic component must have a component attribute');
         }
 
+        return self::class . "::parseDynamicComponent('{$this->getAttribute('path')}', $component)";
+    }
+
+    public static function parseDynamicComponent($path, $component)
+    {
         $isNamespaced = strpos($component, ':') !== false;
 
         // Convert namespace to @ notation
@@ -119,16 +124,16 @@ final class ComponentNode extends IncludeNode
         }
 
         // Converts dot notation to directory separator
-        $component = 'str_replace(\'.\', DIRECTORY_SEPARATOR, ' . $component . ')';
+        $component = str_replace('.', DIRECTORY_SEPARATOR, $component);
 
         if ($isNamespaced) {
-            $dynamicComponentEndPosition = strpos($this->getAttribute('path'), self::DYNAMIC_COMPONENT_NAME) + strlen(self::DYNAMIC_COMPONENT_NAME);
-            $pathEnd = substr($this->getAttribute('path'), $dynamicComponentEndPosition);
-            return $component . ' . \'' . $pathEnd . '\'';
-        } else {
-            $path = str_replace(self::DYNAMIC_COMPONENT_NAME, '\' . ' . $component . ' . \'', $this->getAttribute('path'));
-            return "'$path'";
+            // Strip anything from the path before the dynamic component name, so it begins with the namespace
+            $dynamicComponentEndPosition = strpos($path, self::DYNAMIC_COMPONENT_NAME) + strlen(self::DYNAMIC_COMPONENT_NAME);
+            $pathEnd = substr($path, $dynamicComponentEndPosition);
+            return $component . $pathEnd;
         }
+
+        return str_replace(self::DYNAMIC_COMPONENT_NAME, $component, $path);
     }
 
     public function getTemplateName(): ?string

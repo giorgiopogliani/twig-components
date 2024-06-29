@@ -1,0 +1,6 @@
+<x-dynamic-component :component="'ns:button'" class="{{'bg-blue-' ~ '600' }}"> test1 </x-dynamic-component>
+
+{% set componentName = 'ns:button' %}
+<x-dynamic-component :component="componentName" :class="'bg-blue-600'"> test2 </x-dynamic-component>
+
+<x-dynamic-component :component="componentName" class="'bg-blue-600'"> test3 </x-dynamic-component>

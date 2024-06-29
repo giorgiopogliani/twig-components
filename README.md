@@ -235,6 +235,15 @@ Components can be included with the following:
 </x-ns:button>
 ```
 
+### Dynamic Components
+Sometimes you may need to render a component but not know which component should be rendered until runtime. In this situation, you may use the built-in dynamic-component component to render the component based on a runtime value or variable:
+```twig
+{% set componentName = 'button' %}
+<x-dynamic-component :component="componentName" class='bg-blue-600'>
+    <span class="text-lg">Click here!</span>
+</x-dynamic-component>
+```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.

@@ -2,6 +2,7 @@
 
 namespace Performing\TwigComponents\Node;
 
+use Exception;
 use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\View\ComponentAttributeBag;
 use Performing\TwigComponents\View\ComponentSlot;
@@ -14,6 +15,8 @@ use Twig\Node\Node;
 
 final class ComponentNode extends IncludeNode
 {
+    const DYNAMIC_COMPONENT_NAME = 'dynamic-component';
+
     private Configuration $configuration;
 
     public function __construct(string $path, Node $slot, ?AbstractExpression $variables, int $lineno, Configuration $configuration)
@@ -55,14 +58,16 @@ final class ComponentNode extends IncludeNode
 
     protected function addGetTemplate(Compiler $compiler)
     {
+        $repr = $this->isDynamicComponent() ? 'raw' : 'repr';
+
         $compiler
             ->raw('$this->loadTemplate(' . PHP_EOL)
             ->indent(1)
             ->write('')
-            ->repr($this->getTemplateName())
+            ->$repr($this->getTemplateName())
             ->raw(', ' . PHP_EOL)
             ->write('')
-            ->repr($this->getTemplateName())
+            ->$repr($this->getTemplateName())
             ->raw(', ' . PHP_EOL)
             ->write('')
             ->repr($this->getTemplateLine())
@@ -70,13 +75,80 @@ final class ComponentNode extends IncludeNode
             ->raw(PHP_EOL . ');' . PHP_EOL . PHP_EOL);
     }
 
+    public function isDynamicComponent()
+    {
+        return strpos($this->getAttribute('path'), self::DYNAMIC_COMPONENT_NAME) !== false;
+    }
+
+    public function getDynamicComponent()
+    {
+        $component = null;
+
+        foreach (array_chunk($this->getNode('variables')->nodes, 2) as $pair) {
+            /** @var \Twig\Node\Expression\AbstractExpression $key */
+            $key = $pair[0];
+            /** @var \Twig\Node\Expression\AbstractExpression $value */
+            $value = $pair[1];
+
+            if ($key->getAttribute('value') !== 'component') {
+                continue;
+            }
+
+            if ($value->hasAttribute('value')) {
+                // Returns the component string value
+                $component = '\'' . $value->getAttribute('value') . '\'';
+                break;
+            }
+
+            if ($value->hasAttribute('name')) {
+                // Uses the context to get the component value
+                $component = '($context[\'' . $value->getAttribute('name') . '\'] ?? null)';
+                break;
+            }
+        }
+
+        if (!$component) {
+            throw new Exception('Dynamic component must have a component attribute');
+        }
+
+        return self::class . "::parseDynamicComponent('{$this->getAttribute('path')}', $component)";
+    }
+
+    public static function parseDynamicComponent($path, $component)
+    {
+        $isNamespaced = strpos($component, ':') !== false;
+
+        // Convert namespace to @ notation
+        if ($isNamespaced) {
+            $component = preg_replace('/([a-z\.-]*):([^\']*)/i', '@$1/$2', $component);
+        }
+
+        // Converts dot notation to directory separator
+        $component = str_replace('.', DIRECTORY_SEPARATOR, $component);
+
+        if ($isNamespaced) {
+            // Strip anything from the path before the dynamic component name, so it begins with the namespace
+            $dynamicComponentEndPosition = strpos($path, self::DYNAMIC_COMPONENT_NAME) + strlen(self::DYNAMIC_COMPONENT_NAME);
+            $pathEnd = substr($path, $dynamicComponentEndPosition);
+            return $component . $pathEnd;
+        }
+
+        return str_replace(self::DYNAMIC_COMPONENT_NAME, $component, $path);
+    }
+
     public function getTemplateName(): ?string
     {
+        if ($this->isDynamicComponent()) {
+            return $this->getDynamicComponent();
+        }
+
         return $this->getAttribute('path');
     }
 
     protected function addTemplateArguments(Compiler $compiler)
     {
+        $this->filterVariables();
+
         $compiler
             ->indent(1)
             ->write("\n")
@@ -109,5 +181,24 @@ final class ComponentNode extends IncludeNode
         }
 
         $compiler->write(")\n");
+    }
+
+    public function filterVariables()
+    {
+        if (!$this->isDynamicComponent()) {
+            return;
+        }
+
+        $variables = $this->getNode('variables');
+
+        foreach (array_chunk($variables->nodes, 2, true) as $pair) {
+            /** @var \Twig\Node\Expression\AbstractExpression $key */
+            $key = array_values($pair)[0];
+
+            if ($key->getAttribute('value') === 'component') {
+                $variables->removeNode(array_keys($pair)[0]);
+                $variables->removeNode(array_keys($pair)[1]);
+            }
+        }
     }
 }

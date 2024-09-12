@@ -3,14 +3,12 @@
 namespace Performing\TwigComponents\Node;
 
 use Performing\TwigComponents\View\ComponentSlot;
-use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Node;
 
 use Twig\Node\NodeOutputInterface;
 
-#[YieldReady]
 final class SlotNode extends Node implements NodeOutputInterface
 {
     public function __construct($name, $body, ?AbstractExpression $variables, int $lineno = 0)
@@ -27,10 +25,9 @@ final class SlotNode extends Node implements NodeOutputInterface
         $name = $this->getAttribute('name');
 
         $compiler
-            ->write('$body = (function () use (&$slots, &$context) {')
+            ->write('ob_start();')
             ->subcompile($this->getNode('body'))
-            ->write('})() ?? new \EmptyIterator();' . PHP_EOL)
-            ->write('$body = implode("", iterator_to_array($body));' . PHP_EOL)
+            ->write('$body = ob_get_clean();' . PHP_EOL)
             ->write("\$slots['$name'] = new " . ComponentSlot::class . "(\$body, ");
 
         if ($this->hasNode('variables')) {

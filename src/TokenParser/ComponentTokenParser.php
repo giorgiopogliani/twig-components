@@ -31,8 +31,13 @@ final class ComponentTokenParser extends IncludeTokenParser
 
         $componentPath = rtrim($this->configuration->getTemplatesPath(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . $name;
 
-        if ($this->configuration->isUsingTemplatesExtension()) {
-            $componentPath .= '.' . $this->configuration->getTemplatesExtension();
+        if ($this->configuration->getNeedsHintPath()) {
+            $componentPath = rtrim($componentPath, '.');
+            $componentPath = str_replace('/', '.', $componentPath);
+        } else {
+            if ($this->configuration->isUsingTemplatesExtension()) {
+                $componentPath .= '.' . $this->configuration->getTemplatesExtension();
+            }
         }
 
         return  $componentPath;

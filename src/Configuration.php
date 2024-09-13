@@ -18,6 +18,8 @@ class Configuration
 
     protected string $templatesPath = 'components';
 
+    protected bool $needsHintPath = false;
+
     protected bool $isUsingTemplatesExtension = true;
 
     protected string $templatesExtension = 'twig';
@@ -32,6 +34,13 @@ class Configuration
     public static function make(Environment $twig): Configuration
     {
         return new static($twig);
+    }
+
+    public function setNeedsHintPath(bool $needsHintPath): self
+    {
+        $this->needsHintPath = $needsHintPath;
+
+        return $this;
     }
 
     /**
@@ -50,6 +59,11 @@ class Configuration
     public function getTemplatesPath(): string
     {
         return $this->templatesPath;
+    }
+
+    public function getNeedsHintPath(): bool
+    {
+        return $this->needsHintPath;
     }
 
     public function useTemplatesExtension(bool $isUsing = true): self

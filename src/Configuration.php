@@ -36,22 +36,18 @@ class Configuration
         return new static($twig);
     }
 
-    public function setNeedsHintPath(bool $needsHintPath): self
-    {
-        $this->needsHintPath = $needsHintPath;
-
-        return $this;
-    }
-
     /**
      * Set relative path to components templates.
      *
      * @param string $path
      * @return Configuration
      */
-    public function setTemplatesPath(string $path): self
+    public function setTemplatesPath(string $path, bool $hint = false): self
     {
         $this->templatesPath = rtrim($path, DIRECTORY_SEPARATOR);
+        if ($hint) {
+            $this->needsHintPath = true;
+        }
 
         return $this;
     }

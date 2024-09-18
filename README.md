@@ -99,7 +99,7 @@ final class TwigEnvironmentConfigurator
 
 ### OctoberCMS / WinterCMS
 
-In OctoberCMS / WinterCMS you need to hook into ```cms.page.beforedisplay``` event in order to access twig instance.
+In OctoberCMS / WinterCMS you need to hook into ```cms.page.beforedisplay``` event inside your plugin's boot method in order to access twig instance.
 Then you can use your plugin hint path to choose a views subfolder as component's folder.
 
 ## Usage

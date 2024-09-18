@@ -114,15 +114,18 @@ plugins
 ```
 
 ```php
-Event::Listen('cms.page.beforeDisplay', function ($controller, $url, $page) {
-    $twig = $controller->getTwig();
+ public function boot(): void
+    {
+        Event::Listen('cms.page.beforeDisplay', function ($controller, $url, $page) {
+            $twig = $controller->getTwig();
 
-    Configuration::make($twig)
-        ->setNeedsHintPath(true)
-        ->setTemplatesPath('namespace.pluginname::components')
-        ->useCustomTags()
-        ->setup();
-});
+            Configuration::make($twig)
+                ->setNeedsHintPath(true)
+                ->setTemplatesPath('namespace.pluginname::components')
+                ->useCustomTags()
+                ->setup();
+        });
+    }
 ```
 
 then in your htm files

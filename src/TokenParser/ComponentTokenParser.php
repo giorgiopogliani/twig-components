@@ -45,7 +45,7 @@ final class ComponentTokenParser extends IncludeTokenParser
 
     public function parse(Token $token): Node
     {
-        list($variables, $name) = $this->parseArguments();
+        [$variables, $name] = $this->parseArguments();
 
         $slot = $this->parser->subparse([$this, 'decideBlockEnd'], true);
 

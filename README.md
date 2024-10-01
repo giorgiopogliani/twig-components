@@ -120,8 +120,7 @@ plugins
             $twig = $controller->getTwig();
 
             Configuration::make($twig)
-                ->setNeedsHintPath(true)
-                ->setTemplatesPath('namespace.pluginname::components')
+                ->setTemplatesPath('namespace.pluginname::components', hint: true)
                 ->useCustomTags()
                 ->setup();
         });

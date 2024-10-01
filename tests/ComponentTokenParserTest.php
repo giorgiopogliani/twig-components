@@ -6,49 +6,45 @@ use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\TokenParser\ComponentTokenParser;
 use PHPUnit\Framework\TestCase;
 
-
 class ComponentTokenParserTest extends TestCase
 {
-    private Configuration $configuration;
-
-    public function setUp(): void
-    {
-        $this->configuration = $this->createMock(Configuration::class);
-    }
-
     public function testGetComponentPathWithHintPath()
     {
-        $this->configuration->method('getNeedsHintPath')
-            ->willReturn(true);
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
+        $twig = new \Twig\Environment($loader);
 
-        $this->configuration->method('getTemplatesPath')
-            ->willReturn('mynamespace.myplugin::components');
+        $config = Configuration::make($twig)
+            ->setTemplatesPath('mynamespace.myplugin::components', hint: true)
+            ->setTemplatesExtension('twig')
+            ->useCustomTags();
 
-        $this->configuration->method('getTemplatesExtension')
-            ->willReturn('twig');
+        $this->assertTrue($config->getNeedsHintPath());
+        $this->assertEquals($config->getTemplatesPath(), 'mynamespace.myplugin::components');
+        $this->assertEquals($config->getTemplatesExtension(), 'twig');
 
-        $parser = new ComponentTokenParser($this->configuration);
-
+        $parser = new ComponentTokenParser($config);
         $componentPath = $parser->getComponentPath('test/component');
-
         $this->assertEquals('mynamespace.myplugin::components.test.component', $componentPath);
     }
 
     public function testGetComponentPathWithoutHintPath()
     {
-        $this->configuration->method('getNeedsHintPath')
-            ->willReturn(false);
+        $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
+        $twig = new \Twig\Environment($loader);
 
-        $this->configuration->method('getTemplatesPath')
-            ->willReturn('mynamespace.myplugin::components');
+        $config = Configuration::make($twig)
+            ->setTemplatesPath('_components', hint: false)
+            ->setTemplatesExtension('twig')
+            ->useCustomTags();
 
-        $this->configuration->method('getTemplatesExtension')
-            ->willReturn('twig');
+        $this->assertFalse($config->getNeedsHintPath());
+        $this->assertEquals($config->getTemplatesPath(), '_components');
+        $this->assertEquals($config->getTemplatesExtension(), 'twig');
 
-        $parser = new ComponentTokenParser($this->configuration);
+        $parser = new ComponentTokenParser($config);
 
         $componentPath = $parser->getComponentPath('test/component');
 
-        $this->assertNotEquals('mynamespace.myplugin::components.test.component', $componentPath);
+        $this->assertEquals('_components/test/component.twig', $componentPath);
     }
 }

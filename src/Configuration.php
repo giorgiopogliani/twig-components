@@ -45,9 +45,7 @@ class Configuration
     public function setTemplatesPath(string $path, bool $hint = false): self
     {
         $this->templatesPath = rtrim($path, DIRECTORY_SEPARATOR);
-        if ($hint) {
-            $this->needsHintPath = true;
-        }
+        $this->needsHintPath = $hint;
 
         return $this;
     }

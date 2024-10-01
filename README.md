@@ -122,6 +122,7 @@ plugins
             Configuration::make($twig)
                 ->setTemplatesPath('namespace.pluginname::components', hint: true)
                 ->useCustomTags()
+                ->useGlobalContext() // use this to keep twig context from cms
                 ->setup();
         });
     }

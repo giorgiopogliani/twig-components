@@ -97,7 +97,44 @@ final class TwigEnvironmentConfigurator
 }
 ```
 
+### OctoberCMS / WinterCMS
+
+In OctoberCMS / WinterCMS you need to hook into ```cms.page.beforedisplay``` event inside your plugin's boot method in order to access twig instance.
+Then you can use your plugin hint path to choose a views subfolder as component's folder.
+
 ## Usage
+es. 
+```
+plugins
+|__namespace
+   |__pluginname
+      |__views
+         |__components
+            |__button.htm
+```
+
+```php
+ public function boot(): void
+    {
+        Event::Listen('cms.page.beforeDisplay', function ($controller, $url, $page) {
+            $twig = $controller->getTwig();
+
+            Configuration::make($twig)
+                ->setTemplatesPath('namespace.pluginname::components', hint: true)
+                ->useCustomTags()
+                ->setup();
+        });
+    }
+```
+
+then in your htm files
+
+```
+<x-button>...</x-button>
+```
+
+Alle features like subfolders are supported, like ```<x-forms.input></x-forms.input>``` will refer to ```plugins/namespace/pluginname/views/forms/input.htm```
+
 
 The components are just Twig templates in a folder of your choice (e.g. `components`) and can be used anywhere in your Twig templates. The slot variable is any content you will add between the opening and the close tag.
 

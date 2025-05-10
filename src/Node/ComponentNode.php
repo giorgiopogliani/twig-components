@@ -94,17 +94,19 @@ final class ComponentNode extends IncludeNode
             if ($value->hasAttribute('value')) {
                 // Returns the component string value
                 $component = '\'' . $value->getAttribute('value') . '\'';
+
                 break;
             }
 
             if ($value->hasAttribute('name')) {
                 // Uses the context to get the component value
                 $component = '($context[\'' . $value->getAttribute('name') . '\'] ?? null)';
+
                 break;
             }
         }
 
-        if (!$component) {
+        if (! $component) {
             throw new Exception('Dynamic component must have a component attribute');
         }
 
@@ -127,6 +129,7 @@ final class ComponentNode extends IncludeNode
             // Strip anything from the path before the dynamic component name, so it begins with the namespace
             $dynamicComponentEndPosition = strpos($path, self::DYNAMIC_COMPONENT_NAME) + strlen(self::DYNAMIC_COMPONENT_NAME);
             $pathEnd = substr($path, $dynamicComponentEndPosition);
+
             return $component . $pathEnd;
         }
 
@@ -182,7 +185,7 @@ final class ComponentNode extends IncludeNode
 
     public function filterVariables()
     {
-        if (!$this->isDynamicComponent()) {
+        if (! $this->isDynamicComponent()) {
             return;
         }
 

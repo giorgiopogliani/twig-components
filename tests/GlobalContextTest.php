@@ -3,8 +3,8 @@
 namespace Performing\TwigComponents\Tests;
 
 use Performing\TwigComponents\Configuration;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\TestCase;
 
 class GlobalContextTest extends TestCase
 {

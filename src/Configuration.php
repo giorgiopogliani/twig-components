@@ -157,8 +157,8 @@ class Configuration
             $this->twig->setLexer(new ComponentLexer($this->twig));
         }
 
-        /** @var \Twig\Extension\EscaperExtension */
-        $escaper = $this->twig->getExtension(\Twig\Extension\EscaperExtension::class);
+        /** @var \Twig\Runtime\EscaperRuntime */
+        $escaper = $this->twig->getRuntime(\Twig\Runtime\EscaperRuntime::class);
         $escaper->addSafeClass(ComponentAttributeBag::class, ['all']);
         $escaper->addSafeClass(ComponentSlot::class, ['all']);
     }

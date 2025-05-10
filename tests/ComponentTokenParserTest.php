@@ -4,10 +4,12 @@ namespace Performing\TwigComponents\Tests;
 
 use Performing\TwigComponents\Configuration;
 use Performing\TwigComponents\TokenParser\ComponentTokenParser;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class ComponentTokenParserTest extends TestCase
 {
+    #[Test]
     public function testGetComponentPathWithHintPath()
     {
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');
@@ -27,6 +29,7 @@ class ComponentTokenParserTest extends TestCase
         $this->assertEquals('mynamespace.myplugin::components.test.component', $componentPath);
     }
 
+    #[Test]
     public function testGetComponentPathWithoutHintPath()
     {
         $loader = new \Twig\Loader\FilesystemLoader(__DIR__ . '/templates');

@@ -66,7 +66,7 @@ final class ComponentTokenParser extends IncludeTokenParser
         }
 
         if ($stream->nextIf(/* Token::NAME_TYPE */5, 'with')) {
-            $variables = $this->parser->getExpressionParser()->parseExpression();
+            $variables = $this->parser->parseExpression();
         }
 
         $stream->expect(/* Token::BLOCK_END_TYPE */3);
@@ -80,9 +80,9 @@ final class ComponentTokenParser extends IncludeTokenParser
 
         $path = [];
 
-        if ($this->parser->getCurrentToken()->getType() != /** Token::NAME_TYPE */ 5) {
-            throw new Exception('First token must be a name type');
-        }
+        // if ($this->parser->getCurrentToken()->getType() !== Token::NAME_TYPE) {
+        //     throw new Exception('First token must be a name type');
+        // }
 
         $name = $this->getNameSection();
 
@@ -93,7 +93,7 @@ final class ComponentTokenParser extends IncludeTokenParser
 
         $path[] = $name;
 
-        while ($stream->nextIf(9 /** Token::PUNCTUATION_TYPE */, '.')) {
+        while ($stream->nextIf(8 /** Token::PUNCTUATION_TYPE */, '.')) {
             $path[] = $this->getNameSection();
         }
 

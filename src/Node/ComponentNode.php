@@ -61,11 +61,8 @@ final class ComponentNode extends IncludeNode
         $repr = $this->isDynamicComponent() ? 'raw' : 'repr';
 
         $compiler
-            ->raw('$this->loadTemplate(' . PHP_EOL)
+            ->raw('$this->load(' . PHP_EOL)
             ->indent(1)
-            ->write('')
-            ->$repr($this->getTemplateName())
-            ->raw(', ' . PHP_EOL)
             ->write('')
             ->$repr($this->getTemplateName())
             ->raw(', ' . PHP_EOL)

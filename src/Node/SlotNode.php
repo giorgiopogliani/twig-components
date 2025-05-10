@@ -13,7 +13,7 @@ final class SlotNode extends Node implements NodeOutputInterface
 {
     public function __construct($name, $body, ?AbstractExpression $variables, int $lineno = 0)
     {
-        parent::__construct(['body' => $body], ['name' => $name], $lineno, null);
+        parent::__construct(['body' => $body], ['name' => $name], $lineno);
 
         if ($variables) {
             $this->setNode('variables', $variables);

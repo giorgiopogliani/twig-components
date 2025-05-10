@@ -17,14 +17,13 @@
     ],
     "require": {
         "php": "^7.4|^8.0",
-        "twig/twig": "^3.0"
+        "twig/twig": "^3.21"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.0",
-        "pestphp/pest": "^1.0",
-        "phpunit/phpunit": "^9.3",
-        "symfony/var-dumper": "^5.2",
-        "vimeo/psalm": "^3.11"
+        "friendsofphp/php-cs-fixer": "^3.75",
+        "pestphp/pest": "^3.8",
+        "symfony/var-dumper": "^7.2",
+        "vimeo/psalm": "^6.10"
     },
     "autoload": {
         "psr-4": {

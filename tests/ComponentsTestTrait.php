@@ -2,9 +2,11 @@
 
 namespace Performing\TwigComponents\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 trait ComponentsTestTrait
 {
-    /** @test */
+    #[Test]
     public function render_simple_component()
     {
         $html = $this->twig->render('test_simple_component.twig');
@@ -14,7 +16,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_simple_component_with_dash()
     {
         $html = $this->twig->render('test_simple_component_with_dash.twig');
@@ -24,7 +26,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_simple_component_in_folder()
     {
         $html = $this->twig->render('test_simple_component_in_folder.twig');
@@ -34,7 +36,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_component_with_slots()
     {
         $html = $this->twig->render('test_with_slots.twig');
@@ -44,7 +46,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_xtags_with_slots()
     {
         $html = $this->twig->render('test_xtags_with_slots.twig');
@@ -54,7 +56,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_nested_xtags_with_slots()
     {
         $html = $this->twig->render('test_nested_xtags_with_slots.twig');
@@ -64,7 +66,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_deeply_nested_xtags_with_slots()
     {
         $html = $this->twig->render('test_deeply_nested_xtags_with_slots.twig');
@@ -75,7 +77,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_component_with_xtags()
     {
         $html = $this->twig->render('test_xtags_component.twig');
@@ -87,7 +89,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_component_with_attributes()
     {
         $html = $this->twig->render('test_with_attributes.twig');
@@ -101,7 +103,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_namespaced_component()
     {
         $html = $this->twig->render('test_namespaced_component.twig');
@@ -111,7 +113,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_namespaced_xtags_component()
     {
         $html = $this->twig->render('test_namespaced_xtags_component.twig');
@@ -123,7 +125,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function test_class_merge_works_with_components_in_components()
     {
         $template = $this->twig->createTemplate(<<<HTML
@@ -134,7 +136,7 @@ trait ComponentsTestTrait
         $this->assertEquals('<button class="mb-5 bg-red-500 text-white">Click me</button>', $html);
     }
 
-    /** @test */
+    #[Test]
     public function test_attributes_dont_conflict_with_components_in_components()
     {
         $template = $this->twig->createTemplate(<<<HTML
@@ -145,7 +147,7 @@ trait ComponentsTestTrait
         $this->assertEquals('<div class="mb-5 bg-red-500"><button class="text-white">Click me</button></div>', $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_simple_dynamic_component()
     {
         $html = $this->twig->render('test_simple_dynamic_component.twig');
@@ -156,7 +158,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_dynamic_component_with_xtags()
     {
         $html = $this->twig->render('test_xtags_dynamic_component.twig');
@@ -168,7 +170,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_namespaced_dynamic_component()
     {
         $html = $this->twig->render('test_namespaced_dynamic_component.twig');
@@ -178,7 +180,7 @@ trait ComponentsTestTrait
         HTML, $html);
     }
 
-    /** @test */
+    #[Test]
     public function render_namespaced_xtags_dynamic_component()
     {
         $html = $this->twig->render('test_namespaced_xtags_dynamic_component.twig');

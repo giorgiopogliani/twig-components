@@ -3,6 +3,7 @@
 namespace Performing\TwigComponents\Tests;
 
 use Performing\TwigComponents\Configuration;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class GlobalContextTest extends TestCase
@@ -36,7 +37,7 @@ class GlobalContextTest extends TestCase
         $this->twig = $this->setupTwig();
     }
 
-    /** @test */
+    #[Test]
     public function share_global_context_inside_components()
     {
         $template = $this->twig->createTemplate(<<<HTML

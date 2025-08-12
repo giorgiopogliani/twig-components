@@ -33,7 +33,7 @@ final class SlotTokenParser extends IncludeTokenParser
         }
 
         if ($stream->nextIf(/* Token::NAME_TYPE */5, 'with')) {
-            $variables = $this->parser->getExpressionParser()->parseExpression();
+            $variables = $this->parser->parseExpression();
         }
 
         $stream->expect(/* Token::BLOCK_END_TYPE */3);
@@ -45,9 +45,10 @@ final class SlotTokenParser extends IncludeTokenParser
     {
         $stream = $this->parser->getStream();
 
-        if ($this->parser->getCurrentToken()->getType() != /** Token::NAME_TYPE */ 5) {
-            throw new Exception('First token must be a name type');
-        }
+        //$stream->expect(5);
+        // if ($this->parser->getCurrentToken()->getType() != /** Token::NAME_TYPE */ 5) {
+        //     throw new Exception('First token must be a name type');
+        // }
 
         return $stream->next()->getValue();
     }
